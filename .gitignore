@@ -1,0 +1,20 @@
+# Local Python environment and generated files
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.bak
+
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.key
+.streamlit/secrets.toml
+
+# Downloaded source data and generated evaluation runs
+data/csv/
+evaluation/routing_smoke_*.json
+
+# macOS
+.DS_Store

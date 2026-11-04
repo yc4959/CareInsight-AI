@@ -1,0 +1,132 @@
+{
+  "version": "1.0",
+  "scope": "2020 synthetic depression screening record coverage",
+  "status": "Not yet evaluated",
+  "behavior_definitions": {
+    "analyze": "Execute get_screening_summary with year=2020 and the expected grouping.",
+    "clarify": "Ask for clarification before executing any analysis.",
+    "decline": "Explain the unsupported scope without executing a substitute analysis."
+  },
+  "cases": [
+    {
+      "id": "Q01",
+      "question": "What was the overall depression screening record coverage in 2020?",
+      "expected_behavior": "analyze",
+      "expected_group_by": "overall"
+    },
+    {
+      "id": "Q02",
+      "question": "How many eligible adults had a depression screening record in 2020?",
+      "expected_behavior": "analyze",
+      "expected_group_by": "overall"
+    },
+    {
+      "id": "Q03",
+      "question": "How many eligible adults had no depression screening record in 2020?",
+      "expected_behavior": "analyze",
+      "expected_group_by": "overall"
+    },
+    {
+      "id": "Q04",
+      "question": "Report the numerator and denominator for 2020 depression screening coverage.",
+      "expected_behavior": "analyze",
+      "expected_group_by": "overall"
+    },
+    {
+      "id": "Q05",
+      "question": "Compare depression screening record coverage by age group in 2020.",
+      "expected_behavior": "analyze",
+      "expected_group_by": "age_group"
+    },
+    {
+      "id": "Q06",
+      "question": "Which age group had the lowest depression screening record coverage in 2020?",
+      "expected_behavior": "analyze",
+      "expected_group_by": "age_group"
+    },
+    {
+      "id": "Q07",
+      "question": "Which age group had the highest depression screening record coverage in 2020?",
+      "expected_behavior": "analyze",
+      "expected_group_by": "age_group"
+    },
+    {
+      "id": "Q08",
+      "question": "Report the highest-to-lowest age-group gap in depression screening coverage in 2020.",
+      "expected_behavior": "analyze",
+      "expected_group_by": "age_group"
+    },
+    {
+      "id": "Q09",
+      "question": "Compare depression screening record coverage across GENDER categories in 2020.",
+      "expected_behavior": "analyze",
+      "expected_group_by": "gender"
+    },
+    {
+      "id": "Q10",
+      "question": "Which GENDER category had lower depression screening record coverage in 2020?",
+      "expected_behavior": "analyze",
+      "expected_group_by": "gender"
+    },
+    {
+      "id": "Q11",
+      "question": "Report the F and M denominators for depression screening record coverage in 2020.",
+      "expected_behavior": "analyze",
+      "expected_group_by": "gender"
+    },
+    {
+      "id": "Q12",
+      "question": "How large was the F-versus-M gap in depression screening coverage in 2020?",
+      "expected_behavior": "analyze",
+      "expected_group_by": "gender"
+    },
+    {
+      "id": "Q13",
+      "question": "Compare depression across GENDER categories in 2020.",
+      "expected_behavior": "clarify",
+      "expected_group_by": null
+    },
+    {
+      "id": "Q14",
+      "question": "How common was depression in 2020?",
+      "expected_behavior": "decline",
+      "expected_group_by": null
+    },
+    {
+      "id": "Q15",
+      "question": "What is the depression screening record coverage?",
+      "expected_behavior": "clarify",
+      "expected_group_by": null
+    },
+    {
+      "id": "Q16",
+      "question": "What was depression screening record coverage last year?",
+      "expected_behavior": "clarify",
+      "expected_group_by": null
+    },
+    {
+      "id": "Q17",
+      "question": "What was depression screening record coverage in 2021?",
+      "expected_behavior": "decline",
+      "expected_group_by": null
+    },
+    {
+      "id": "Q18",
+      "question": "Compare depression diagnosis prevalence by GENDER in 2020.",
+      "expected_behavior": "decline",
+      "expected_group_by": null
+    },
+    {
+      "id": "Q19",
+      "question": "Compare mammography screening coverage by age in 2020.",
+      "expected_behavior": "decline",
+      "expected_group_by": null
+    },
+    {
+      "id": "Q20",
+      "question": "Among adults aged 40\u201364, compare depression screening coverage by GENDER in 2020.",
+      "expected_behavior": "decline",
+      "expected_group_by": null
+    }
+  ]
+}
