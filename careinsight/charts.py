@@ -8,11 +8,16 @@ TEAL = "#168B85"
 TIME_COLUMNS = {"year", "calendar_year", "month", "date"}
 
 
+def is_time_column(name: str) -> bool:
+    name = name.lower()
+    return name in TIME_COLUMNS or name.endswith("_year") or name.endswith("_month")
+
+
 def _columns(frame):
     categories = [c for c in frame if not pd.api.types.is_numeric_dtype(frame[c])
-                  or c.lower() in TIME_COLUMNS]
+                  or is_time_column(c)]
     values = [c for c in frame if pd.api.types.is_numeric_dtype(frame[c])
-              and c.lower() not in TIME_COLUMNS]
+              and not is_time_column(c)]
     return categories, values
 
 
@@ -24,7 +29,7 @@ def chart_options(frame: pd.DataFrame) -> list[str]:
     options = []
     if len(categories) >= 1 and len(numeric) >= 1 and len(frame) > 1:
         options.append("Bar chart")
-    time_columns = [c for c in categories if c.lower() in TIME_COLUMNS]
+    time_columns = [c for c in categories if is_time_column(c)]
     if time_columns and numeric and len(frame) > 1:
         options.append("Line chart")
     if len(categories) >= 2 and numeric and len(frame) > 1:
@@ -41,10 +46,14 @@ def make_chart(frame: pd.DataFrame, kind: str, value: str | None = None):
     if value not in numeric:
         raise ValueError("The chart value must be a numeric result column.")
     if kind == "Bar chart":
-        category = categories[0]
+        category = next((c for c in categories if is_time_column(c)), categories[0])
         if len(categories) >= 2:
+            series = next(c for c in categories if c != category)
+            chart_frame = frame.copy()
+            chart_frame[category] = chart_frame[category].astype(str)
+            chart_frame[series] = chart_frame[series].astype(str)
             fig = px.bar(
-                frame, x=category, y=value, color=categories[1], barmode="group",
+                chart_frame, x=category, y=value, color=series, barmode="group",
                 labels={value: value.replace("_", " ").title()},
             )
             fig.update_xaxes(type="category")
@@ -65,7 +74,7 @@ def make_chart(frame: pd.DataFrame, kind: str, value: str | None = None):
         fig.update_yaxes(type="category")
         return fig
     if kind == "Line chart":
-        time_col = next(c for c in categories if c.lower() in TIME_COLUMNS)
+        time_col = next(c for c in categories if is_time_column(c))
         chart_frame = frame.copy().sort_values(time_col)
         color = next((c for c in categories if c != time_col), None)
         fig = px.line(chart_frame, x=time_col, y=value, color=color, markers=True,

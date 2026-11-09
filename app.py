@@ -7,7 +7,7 @@ import plotly.express as px
 import streamlit as st
 
 from careinsight.open_analysis import analyze
-from careinsight.charts import chart_options, make_chart
+from careinsight.charts import chart_options, is_time_column, make_chart
 
 EXAMPLE_QUESTIONS = (
     "Compare adult substance use screening record coverage by GENDER in 2020.",
@@ -257,7 +257,7 @@ if result and not pending:
                     )
                     numeric_values = [column for column in frame
                                       if pd.api.types.is_numeric_dtype(frame[column])
-                                      and column.lower() not in {"year", "calendar_year", "month", "date"}]
+                                      and not is_time_column(column)]
                     value = (st.selectbox("Chart value", numeric_values,
                                           key="explore_chart_value")
                              if len(numeric_values) > 1 else numeric_values[0])

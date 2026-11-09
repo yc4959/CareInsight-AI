@@ -23,3 +23,13 @@ def test_heatmap_refuses_duplicate_group_pairs():
     })
     with pytest.raises(ValueError, match="one value per pair"):
         make_chart(frame, "Heatmap", "records")
+
+
+def test_generated_year_name_is_an_axis_not_a_measure():
+    frame = pd.DataFrame({
+        "encounter_type": ["wellness", "outpatient"] * 2,
+        "procedure_year": [2019, 2019, 2020, 2020],
+        "record_count": [10, 4, 12, 6],
+    })
+    assert chart_options(frame) == ["Bar chart", "Line chart", "Heatmap"]
+    assert make_chart(frame, "Line chart", "record_count").data
