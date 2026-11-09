@@ -29,7 +29,7 @@ def test_trend_runs_both_years_and_checks_each(monkeypatch):
     for key in ("DEEPSEEK_API_KEY", "DEEPSEEK_BASE_URL", "DEEPSEEK_MODEL"):
         monkeypatch.setenv(key, "offline-test")
     arguments = {"metric": "substance_use", "start_year": 2019,
-                 "end_year": 2020, "plan": "Compare separate annual adult cohorts."}
+                 "end_year": 2020, "plan": "2019 adults born before 2019-01-01."}
     monkeypatch.setattr(open_analysis, "call_model", lambda messages, tools: {
         "tool_calls": [{"id": "offline", "function": {
             "name": "run_verified_screening_trend",
@@ -41,6 +41,9 @@ def test_trend_runs_both_years_and_checks_each(monkeypatch):
     )
     assert result["status"] == "validated"
     assert result["metric_reference"]["trend"] is True
+    assert "2001-01-01" in result["plan"]
+    assert "2002-01-01" in result["plan"]
+    assert "born before 2019-01-01" not in result["plan"]
     assert [(row["group_name"], row["denominator"], row["numerator"])
             for row in result["query"]["rows"]] == [
                 ("2019", 674, 219), ("2020", 699, 230),

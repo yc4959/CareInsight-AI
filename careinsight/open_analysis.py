@@ -347,6 +347,34 @@ def _request_boundary(question):
     return None
 
 
+def _reviewed_plan(tool_name, args, reference):
+    """Describe the rules that the reviewed SQL actually executed."""
+    years = (2019, 2020) if tool_name == "run_verified_screening_trend" else (args["year"],)
+    year_label = " and ".join(str(year) for year in years)
+    cohort_rules = "; ".join(
+        f"{year}: born on or before {year - 18}-01-01, no recorded death "
+        f"through {year}-12-31, and at least one encounter starting in "
+        f"UTC [{year}-01-01, {year + 1}-01-01)"
+        for year in years
+    )
+    group = ("calendar year" if len(years) == 2 else {
+        "overall": "all eligible adults",
+        "age_group": "age group (18–39, 40–64, 65+)",
+        "gender": "the original GENDER values",
+    }[args["group_by"]])
+    codes = ", ".join(reference["procedure_codes"])
+    description = (
+        f"Count distinct eligible adults and distinct adults with at least one "
+        f"qualifying {args['metric'].replace('_', ' ')} screening procedure "
+        f"record (codes {codes}) for {year_label}, grouped by {group}. "
+        f"Annual cohort rules: {cohort_rules}. Compare every numerator and "
+        f"denominator with the independent reference."
+    )
+    if len(years) == 2:
+        description += " The two annual cohorts may contain different people."
+    return description
+
+
 def analyze(question, history=None):
     if not isinstance(question, str) or not question.strip():
         raise ValueError("Enter an English analysis question.")
@@ -435,6 +463,7 @@ def analyze(question, history=None):
                          "source_tables": ["encounters", "patients", "procedures"],
                          "row_count": len(rows), "rows": rows}
                 reference = {"metric_name": annual[0]["metric_name"],
+                             "procedure_codes": annual[0]["procedure_codes"],
                              "year": "2019–2020", "trend": True,
                              "groups": [{"group": row["group_name"],
                                          "denominator": row["denominator"],
@@ -490,12 +519,17 @@ def analyze(question, history=None):
                                  ". Correct the analysis and call one available tool."})
             continue
         attempt["status"] = "validated" if reference is not None else "executed"
+        display_plan = (
+            _reviewed_plan(tool_name, args, reference)
+            if reference is not None else args["plan"]
+        )
+        attempt["plan"] = display_plan
         if tool_name in {"run_aggregate_sql", "run_verified_screening",
                          "run_verified_screening_trend"}:
             attempt["sql"] = query["sql"]
         return {"status": "validated" if reference is not None else "exploratory",
                 "question": question,
-                "plan": args["plan"], "tool": tool_name, "query": query,
+                "plan": display_plan, "tool": tool_name, "query": query,
                 "checks": checks, "attempts": attempts,
                 "cross_check": cross_check,
                 "metric_reference": reference,
