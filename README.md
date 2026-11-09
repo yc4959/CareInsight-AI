@@ -2,7 +2,9 @@
 
 **A natural-language analytics prototype for synthetic healthcare records.** Ask a plain-English data question; the model selects a reviewed screening measure, restricted SQL, or parameterized Pandas. One app displays the calculated table, chart when suitable, plan, evidence level, and analysis trace.
 
-This is a local portfolio prototype. It uses **Synthea synthetic data**, not real patient records. Its exploratory answers are not clinical findings or validated population estimates.
+This is a portfolio prototype using **Synthea synthetic data**, not real patient records. Its exploratory answers are not clinical findings or validated population estimates.
+
+**[Try the live app](https://careinsight-ai-cdcqgk3wyjhuapear6parn.streamlit.app/)** · [Source code](https://github.com/yc4959/CareInsight-AI)
 
 ## Try it
 
@@ -49,7 +51,7 @@ python -m pip install -r requirements.txt
 python -m streamlit run app.py
 ```
 
-The main app requires `DEEPSEEK_API_KEY`, `DEEPSEEK_BASE_URL`, and `DEEPSEEK_MODEL` in the server environment. Keep keys out of source files and Git. A hosted version needs these values configured as server secrets so visitors do not supply their own key. A live hosted demo has not yet been verified.
+The main app requires `DEEPSEEK_API_KEY`, `DEEPSEEK_BASE_URL`, and `DEEPSEEK_MODEL` in the server environment. Keep keys out of source files and Git. The hosted app uses Streamlit Secrets so visitors do not supply their own key. The live app was verified with a 2020 substance-use screening comparison by GENDER: its SQL counts matched the independent reference (F 113/388; M 117/311).
 
 ## Deploy on Streamlit Community Cloud
 
@@ -88,4 +90,4 @@ The two benchmark commands call the configured model and consume API usage. The 
 - A passed numerical cross-check does not prove that a free-form question was interpreted correctly.
 - The SQL restrictions are for a local prototype; this is not a reviewed multi-user clinical data service.
 
-The next portfolio milestones are broader question evaluation, a short walkthrough video, and a verified hosted demo with server-managed model credentials.
+The next portfolio milestones are broader question evaluation and a short walkthrough video.
