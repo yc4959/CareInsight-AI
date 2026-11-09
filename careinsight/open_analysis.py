@@ -66,7 +66,7 @@ For condition questions, explain in the plan whether START means new records
 in the year or START/STOP overlap means records active during the year.
 
 Choose among three tools yourself:
-- run_verified_screening for the custom 2019 or 2020 adult depression or substance-use
+- run_verified_screening for the custom 2018, 2019, or 2020 adult depression or substance-use
   screening RECORD coverage measure, overall or by age group or GENDER. Choose
   metric and group_by; the tool builds reviewed SQL from those parameters and
   independently calculates the reference cohort. It compares every group
@@ -106,11 +106,11 @@ not claim any result is clinically validated or statistically significant.
 
 TOOLS = [{"type": "function", "function": {
     "name": "run_verified_screening",
-    "description": "Calculate one reviewed 2019 or 2020 adult screening-record measure using SQL and compare all counts against an independent reference implementation. Supply measure and grouping, not SQL source.",
+    "description": "Calculate one reviewed 2018, 2019, or 2020 adult screening-record measure using SQL and compare all counts against an independent reference implementation. Supply measure and grouping, not SQL source.",
     "parameters": {"type": "object", "properties": {
         "metric": {"type": "string", "enum": ["depression", "substance_use"]},
         "group_by": {"type": "string", "enum": ["overall", "age_group", "gender"]},
-        "year": {"type": "integer", "enum": [2019, 2020]},
+        "year": {"type": "integer", "enum": [2018, 2019, 2020]},
         "plan": {"type": "string"},
     }, "required": ["metric", "group_by", "year", "plan"],
     "additionalProperties": False},
@@ -169,7 +169,7 @@ def _parse_call(reply):
         if (set(args) != {"metric", "group_by", "year", "plan"}
                 or args["metric"] not in {"depression", "substance_use"}
                 or args["group_by"] not in {"overall", "age_group", "gender"}
-                or type(args["year"]) is not int or args["year"] not in {2019, 2020}):
+                or type(args["year"]) is not int or args["year"] not in {2018, 2019, 2020}):
             raise ValueError("Verified screening arguments do not match the contract.")
     elif name == "run_verified_screening_trend":
         if (set(args) != {"metric", "start_year", "end_year", "plan"}

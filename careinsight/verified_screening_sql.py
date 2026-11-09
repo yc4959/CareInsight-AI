@@ -1,4 +1,4 @@
-"""Reviewed SQL templates for adult screening-record measures in full years.
+"""Reviewed SQL templates for adult screening-record measures in selected years.
 
 These templates calculate counts from the CSV tables at execution time. They
 contain no saved answer values and accept only enumerated measure/group choices.
@@ -9,6 +9,8 @@ PROCEDURE_CODES = {
     "depression": ("171207006", "454711000124102", "715252007"),
     "substance_use": ("713106006",),
 }
+
+REVIEWED_YEARS = frozenset({2018, 2019, 2020})
 
 GROUP_EXPRESSIONS = {
     "overall": "'All eligible adults'",
@@ -23,8 +25,8 @@ def build_verified_screening_sql(*, metric: str, group_by: str, year: int) -> st
         raise ValueError("Unsupported screening measure.")
     if group_by not in GROUP_EXPRESSIONS:
         raise ValueError("Unsupported screening grouping.")
-    if type(year) is not int or year not in {2019, 2020}:
-        raise ValueError("Only reviewed full years 2019 and 2020 are available.")
+    if type(year) is not int or year not in REVIEWED_YEARS:
+        raise ValueError("Only reviewed years 2018, 2019, and 2020 are available.")
     codes = ", ".join(f"'{code}'" for code in PROCEDURE_CODES[metric])
     group = GROUP_EXPRESSIONS[group_by]
     birth_cutoff = f"{year - 18}-01-01"

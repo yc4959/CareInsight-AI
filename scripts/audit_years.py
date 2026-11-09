@@ -109,8 +109,9 @@ def build_report() -> str:
         "rows). Screening-code rows rise too. The audit does not establish why "
         "this happened; it is a warning against treating the full series as a "
         "uniform clinical trend.",
-        "- The current independently checked adult screening measures remain "
-        "limited to 2019 and 2020. Extending them to another year requires "
+        "- The current independently checked adult screening measures cover "
+        "2018, 2019, and 2020 as separate annual analyses. The reviewed cross-year "
+        "comparison covers 2019–2020. Extending them to another year requires "
         "year-specific cohort, code, missingness, and independent count checks.",
         "- These are synthetic records, not estimates of real population "
         "screening, diagnosis, or treatment.",

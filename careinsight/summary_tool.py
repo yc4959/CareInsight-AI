@@ -4,6 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 from careinsight.data_source import source_path
+from careinsight.verified_screening_sql import REVIEWED_YEARS
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -16,8 +17,8 @@ def get_screening_summary(
         raise ValueError("Supported metrics: depression, substance_use.")
     if group_by not in {"overall", "age_group", "gender"}:
         raise ValueError("Supported groupings: overall, age_group, gender.")
-    if type(year) is not int or year not in {2019, 2020}:
-        raise ValueError("Only reviewed full years 2019 and 2020 are supported.")
+    if type(year) is not int or year not in REVIEWED_YEARS:
+        raise ValueError("Only reviewed years 2018, 2019, and 2020 are supported.")
 
     patients = pd.read_csv(source_path("patients"), dtype="string")
     encounters = pd.read_csv(source_path("encounters"), dtype="string")

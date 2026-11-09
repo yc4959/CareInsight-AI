@@ -8,7 +8,7 @@ flowchart LR
     A --> G[Request boundary and year checks]
     G -->|Needs clarification or unsupported| N[No analysis]
     G --> M[Model selects one tool]
-    M --> V[Reviewed 2019 or 2020 screening measure]
+    M --> V[Reviewed 2018 to 2020 single-year screening measure]
     M --> S[Restricted aggregate SQL]
     M --> P[Parameterized Pandas]
     V --> R[Independent Pandas reference]

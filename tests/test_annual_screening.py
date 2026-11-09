@@ -10,7 +10,7 @@ from careinsight.summary_tool import get_screening_summary
 from careinsight.verified_screening_sql import build_verified_screening_sql
 
 
-@pytest.mark.parametrize("year", [2019, 2020])
+@pytest.mark.parametrize("year", [2018, 2019, 2020])
 @pytest.mark.parametrize("metric", ["depression", "substance_use"])
 @pytest.mark.parametrize("group_by", ["overall", "age_group", "gender"])
 def test_annual_sql_matches_independent_pandas(year, metric, group_by):
@@ -69,8 +69,28 @@ def test_2019_single_year_uses_2019_cohort(monkeypatch):
     }]
 
 
+def test_2018_single_year_uses_2018_cohort(monkeypatch):
+    for key in ("DEEPSEEK_API_KEY", "DEEPSEEK_BASE_URL", "DEEPSEEK_MODEL"):
+        monkeypatch.setenv(key, "offline-test")
+    arguments = {"metric": "depression", "group_by": "overall", "year": 2018,
+                 "plan": "Count eligible adults with a 2018 depression screening record."}
+    monkeypatch.setattr(open_analysis, "call_model", lambda messages, tools: {
+        "tool_calls": [{"id": "offline", "function": {
+            "name": "run_verified_screening", "arguments": json.dumps(arguments),
+        }}]
+    })
+    result = open_analysis.analyze(
+        "How many adults had a depression screening record in 2018?"
+    )
+    assert result["status"] == "validated"
+    assert "2000-01-01" in result["plan"]
+    assert result["query"]["rows"] == [{
+        "group_name": "All eligible adults", "denominator": 672, "numerator": 497,
+    }]
+
+
 def test_incomplete_year_not_marked_as_reviewed():
-    with pytest.raises(ValueError, match="2019 and 2020"):
+    with pytest.raises(ValueError, match="2018, 2019, and 2020"):
         get_screening_summary(year=2021)
-    with pytest.raises(ValueError, match="2019 and 2020"):
+    with pytest.raises(ValueError, match="2018, 2019, and 2020"):
         build_verified_screening_sql(year=2021, metric="depression", group_by="overall")

@@ -8,11 +8,11 @@ The agent accepts natural-language descriptive questions, asks for clarification
 
 | Question type | Current answer and evidence |
 | --- | --- |
-| Adult depression or substance-use screening **record coverage** in full calendar year 2019 or 2020, overall, by age group, or by original `GENDER` | Reviewed cohort and procedure-code definition. SQL group counts must equal an independent Pandas calculation. |
+| Adult depression or substance-use screening **record coverage** in full calendar year 2018, 2019, or 2020, overall, by age group, or by original `GENDER` | Reviewed cohort and procedure-code definition. SQL group counts must equal an independent Pandas calculation. |
 | The same screening measure compared between 2019 and 2020 | Each year's separate adult cohort and counts are independently checked. This is a comparison of annual records, not the same people followed over time. |
 | Other aggregate questions over approved fields, such as procedure descriptions, encounter types, or condition records in a selected year | Exploratory result. Query restrictions and numeric checks apply; a Pandas result also receives an independent SQL count check. The meaning of an arbitrary question and its chosen measure are not independently established. |
 
-The underlying event records span many decades and stop in November 2021. Historical records being present does **not** make every year complete, equally generated, or suitable for a comparable annual screening measure. The current reviewed annual coverage window is 2019–2020. A missing procedure record does not prove a screening was not performed. Condition records are not disease prevalence, and these synthetic results cannot establish real-world rates, causes, or treatment effects.
+The underlying event records span many decades and stop in November 2021. Historical records being present does **not** make every year complete, equally generated, or suitable for a comparable annual screening measure. The current reviewed single-year coverage choices are 2018–2020; the reviewed cross-year comparison is 2019–2020. A missing procedure record does not prove a screening was not performed. Condition records are not disease prevalence, and these synthetic results cannot establish real-world rates, causes, or treatment effects.
 
 The [annual data audit](annual_data_audit.md) summarizes 2000–2021 record availability and highlights an abrupt procedure-volume change around 2011–2012. It is an availability check, not approval to compare screening coverage across all those years.
 

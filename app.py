@@ -10,6 +10,7 @@ from careinsight.open_analysis import analyze
 
 EXAMPLE_QUESTIONS = (
     "Compare adult substance use screening record coverage by GENDER in 2020.",
+    "How many adults had a depression screening record in 2018?",
     "How did adult depression screening record coverage change between 2019 and 2020?",
     "Which procedure descriptions appeared most often in 2020? Show the top 10 by number of records.",
     "Which encounter types have the most substance use screening procedure records in 2020?",
@@ -34,7 +35,7 @@ st.info(
 )
 st.warning(
     "Verified screening results match an independently calculated reference "
-    "for defined 2019 and 2020 annual measures. The 2021 sample stops in "
+    "for defined 2018, 2019, and 2020 annual measures. The 2021 sample stops in "
     "November and is not used for full-year comparisons. Other questions "
     "remain exploratory: query "
     "restrictions and result checks cannot verify every new question's meaning."
@@ -47,8 +48,9 @@ with st.expander("What works now · Full product vision · Free hosting limits")
         "encounters, procedures, and conditions. Only approved analysis columns are "
         "packaged. You can ask descriptive aggregate questions about these records. "
         "The two custom adult screening-record measures are independently checked "
-        "for full calendar years 2019 and 2020, including a comparison between "
-        "those years. Other years and questions may be explored as records, but "
+        "for full calendar years 2018, 2019, and 2020. The reviewed cross-year "
+        "comparison currently covers 2019 and 2020. Other years and questions "
+        "may be explored as records, but "
         "they do not inherit that verified-measure label. The sample ends in "
         "November 2021.\n\n"
         "**Full product vision**\n\n"

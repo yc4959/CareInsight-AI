@@ -36,5 +36,5 @@ Source: the four packaged, approved-column tables from the public Synthea 1K sam
 - `conditions`: 0 invalid START dates; 0 missing PATIENT values; latest START 2021-11-15.
 - 2021 has records in January–November only, so this sample cannot support a complete-calendar-year 2021 comparison.
 - Procedure volume rises sharply between 2010 and 2012 (462 to 5,905 rows). Screening-code rows rise too. The audit does not establish why this happened; it is a warning against treating the full series as a uniform clinical trend.
-- The current independently checked adult screening measures remain limited to 2019 and 2020. Extending them to another year requires year-specific cohort, code, missingness, and independent count checks.
+- The current independently checked adult screening measures cover 2018, 2019, and 2020 as separate annual analyses. The reviewed cross-year comparison covers 2019–2020. Extending them to another year requires year-specific cohort, code, missingness, and independent count checks.
 - These are synthetic records, not estimates of real population screening, diagnosis, or treatment.

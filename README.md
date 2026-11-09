@@ -6,7 +6,7 @@ This is a portfolio prototype using **Synthea synthetic data**, not real patient
 
 **[Try the live app](https://careinsight-ai-cdcqgk3wyjhuapear6parn.streamlit.app/)** · [Source code](https://github.com/yc4959/CareInsight-AI)
 
-**Current scope:** All rows from four source tables are packaged with approved columns. Independently checked screening-record coverage is available for complete calendar years 2019 and 2020; other supported aggregate questions are labeled exploratory. **Full product vision and free-hosting limits:** see [Scope and roadmap](docs/scope_and_roadmap.md). The local 18-file download is about 539 MB; it is not all hosted or queryable in this version.
+**Current scope:** All rows from four source tables are packaged with approved columns. Independently checked single-year screening-record coverage is available for 2018, 2019, and 2020; the reviewed cross-year comparison covers 2019–2020. Other supported aggregate questions are labeled exploratory. **Full product vision and free-hosting limits:** see [Scope and roadmap](docs/scope_and_roadmap.md). The local 18-file download is about 539 MB; it is not all hosted or queryable in this version.
 
 The [2000–2021 annual data audit](docs/annual_data_audit.md) shows event counts, months with records, and screening-code rows by year. It identifies the incomplete 2021 window and a large change in procedure volume around 2011–2012; neither observation is a validated clinical trend. Regenerate it with `CAREINSIGHT_USE_DEMO_DATA=1 python -m scripts.audit_years`.
 
@@ -32,6 +32,7 @@ flowchart LR
 
 - “Which procedure descriptions appeared most often in 2020? Show the top 10 by number of records.”
 - “How did adult depression screening record coverage change between 2019 and 2020?”
+- “How many adults had a depression screening record in 2018?”
 - “In 2019, which procedure codes involved the most different patients? Show the top five codes.”
 - “Which encounter types have the most substance use screening procedure records in 2020?”
 - “2019 top five” is deliberately incomplete; the agent should clarify what to rank.
@@ -42,7 +43,7 @@ The app accepts open-text descriptive questions over the exposed data. It cannot
 ## What happens after a question
 
 1. The model interprets the request and selects a reviewed screening tool, **restricted aggregate SQL**, or **parameterized Pandas**.
-2. For a reviewed 2019 or 2020 screening measure, code builds SQL from the selected measure, year, and grouping, then compares every count with an independent Pandas reference. The two-year comparison checks each annual cohort separately. Other generated SQL receives structural and arithmetic checks.
+2. For a reviewed 2018, 2019, or 2020 screening measure, code builds SQL from the selected measure, year, and grouping, then compares every count with an independent Pandas reference. The 2019–2020 comparison checks each annual cohort separately. Other generated SQL receives structural and arithmetic checks.
 3. Pandas aggregations are recomputed in DuckDB using the same selected parameters. This checks the numbers, **not** whether the selected parameters match the user's intent.
 4. The app shows a table, chart when suitable, source tables, tool parameters or SQL, and checks performed.
 
@@ -52,7 +53,7 @@ The exploratory tool uses `patients`, `encounters`, `procedures`, and `condition
 
 | Result shown in `app.py` | Purpose | Evidence level |
 | --- | --- | --- |
-| Independently checked screening result | A defined 2019 or 2020 adult depression or substance-use screening record measure, overall or by age group or GENDER; or a 2019–2020 comparison of separate annual cohorts. | SQL counts must match the independent reference for every group or year before publication. The model's choice of measure, grouping, and year is checked against the question. |
+| Independently checked screening result | A defined 2018, 2019, or 2020 adult depression or substance-use screening record measure, overall or by age group or GENDER; or a 2019–2020 comparison of separate annual cohorts. | SQL counts must match the independent reference for every group or year before publication. The model's choice of measure, grouping, and year is checked against the question. |
 | Exploratory result | Other descriptive questions over approved synthetic tables, including procedure and encounter counts. | Query restrictions and result checks. Pandas counts also receive a cross-tool numerical check; arbitrary SQL meanings are not independently audited. |
 
 Earlier interfaces are retained under `legacy/` for project history; `app.py` is the single main entry point.
@@ -94,7 +95,7 @@ Do not commit a populated `secrets.toml` file. The app reads these values from e
 
 ## Evaluation
 
-[`evaluation/report.md`](evaluation/report.md) records the observed runs, failures, and corrections. The fixed cases include **8/8** in the post-fix regression, **4/4** wording and counting-unit cases, and **1/1** unavailable-year case: **13/13 single-turn fixed cases across three separate observed runs**, with eight executed analyses matching expected counts and five requests ending without analysis as expected. Two clarification follow-ups also passed in separate completed tests. These are **small fixed-case results**, not an overall accuracy or routing estimate. Earlier failures and evaluator corrections remain in the report. The latest full offline test run passed **42 tests**, including 12 independent annual SQL–Pandas comparisons; the new live model route is checked separately below.
+[`evaluation/report.md`](evaluation/report.md) records the observed runs, failures, and corrections. The fixed cases include **8/8** in the post-fix regression, **4/4** wording and counting-unit cases, and **1/1** unavailable-year case: **13/13 single-turn fixed cases across three separate observed runs**, with eight executed analyses matching expected counts and five requests ending without analysis as expected. Two clarification follow-ups also passed in separate completed tests. These are **small fixed-case results**, not an overall accuracy or routing estimate. Earlier failures and evaluator corrections remain in the report. The latest full offline test run passed **49 tests**, including 18 independent annual SQL–Pandas comparisons; live model routing is checked separately.
 
 Run local checks with:
 
