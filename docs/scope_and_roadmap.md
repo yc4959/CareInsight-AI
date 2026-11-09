@@ -26,6 +26,8 @@ The [annual data audit](annual_data_audit.md) summarizes 2000–2021 record avai
 
 These are **planned directions**, not capabilities of the current live demo. The goal is broader question coverage with explicit definitions and evidence levels, rather than accepting any question and treating an executable query as a verified answer.
 
+The current app can render bar charts, line charts for results with a time column, and heatmaps for results with two grouping columns and one numeric measure. A geographic map needs approved location fields and a defined geographic aggregation. The hosted sample currently omits location columns, and this synthetic sample should not be presented as a representative regional population map.
+
 ## Why the complete download is not in the free hosted demo
 
 The local source folder contains **18 CSV files, about 539 MB uncompressed**; `claims_transactions.csv` is about 296 MB. The public GitHub repository currently excludes `data/csv/` and includes only the four compressed approved-column files needed by the app. GitHub enforces a 100 MB limit on an ordinary single repository object and recommends storing generated large files outside Git. This is a GitHub repository limit, not a limit on how many historical years may be analyzed.

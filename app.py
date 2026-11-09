@@ -7,6 +7,7 @@ import plotly.express as px
 import streamlit as st
 
 from careinsight.open_analysis import analyze
+from careinsight.charts import chart_options, make_chart
 
 EXAMPLE_QUESTIONS = (
     "Compare adult substance use screening record coverage by GENDER in 2020.",
@@ -14,6 +15,7 @@ EXAMPLE_QUESTIONS = (
     "How did adult depression screening record coverage change between 2019 and 2020?",
     "Which procedure descriptions appeared most often in 2020? Show the top 10 by number of records.",
     "Which encounter types have the most substance use screening procedure records in 2020?",
+    "Show procedure record counts by encounter type and year from 2018 to 2020.",
 )
 
 
@@ -31,7 +33,8 @@ st.caption("Synthetic Synthea data · One analysis workflow · Visible evidence 
 st.info(
     "Ask a descriptive question about patients, encounters, or procedure records. "
     "The agent selects a verified screening measure, read-only SQL, or a "
-    "parameterized Pandas analysis."
+    "parameterized Pandas analysis. Choose a chart type when the returned "
+    "aggregate data supports it."
 )
 st.warning(
     "Verified screening results match an independently calculated reference "
@@ -247,33 +250,21 @@ if result and not pending:
                     )
             else:
                 st.dataframe(frame, hide_index=True, width="stretch")
-                numeric = [column for column in frame if pd.api.types.is_numeric_dtype(frame[column])]
-                labels = [column for column in frame if column not in numeric]
-                if len(labels) == 1 and len(numeric) == 1 and 1 < len(frame) <= 30:
-                    chart_frame = frame.copy()
-                    chart_frame["_short_label"] = chart_frame[labels[0]].astype(str).map(
-                        lambda value: value if len(value) <= 48 else value[:45] + "..."
+                options = chart_options(frame)
+                if options:
+                    chart_type = st.selectbox(
+                        "Chart type", options, key="explore_chart_type"
                     )
-                    chart = px.bar(
-                        chart_frame, x=numeric[0], y="_short_label",
-                        orientation="h", text=numeric[0],
-                        custom_data=[labels[0]],
-                        labels={"_short_label": "",
-                                numeric[0]: "Number of records" if numeric[0] in {
-                                    "value", "procedure_record_count", "screening_procedure_records"
-                                } else numeric[0].replace("_", " ").title()},
-                    )
-                    chart.update_traces(
-                        marker_color="#168B85", textposition="outside",
-                        hovertemplate="%{customdata[0]}<br>Count: %{x}<extra></extra>",
-                    )
-                    chart.update_layout(
-                        showlegend=False, yaxis_autorange="reversed",
-                        height=max(400, 48 * len(frame)),
-                        margin=dict(l=20, r=60, t=20, b=30),
-                    )
-                    chart.update_yaxes(type="category")
-                    st.plotly_chart(chart, width="stretch")
+                    numeric_values = [column for column in frame
+                                      if pd.api.types.is_numeric_dtype(frame[column])
+                                      and column.lower() not in {"year", "calendar_year", "month", "date"}]
+                    value = (st.selectbox("Chart value", numeric_values,
+                                          key="explore_chart_value")
+                             if len(numeric_values) > 1 else numeric_values[0])
+                    try:
+                        st.plotly_chart(make_chart(frame, chart_type, value), width="stretch")
+                    except ValueError as exc:
+                        st.info(str(exc))
         if not validated:
             st.caption(
                 "Calculated from synthetic records. Query restrictions and result-shape "

@@ -1,6 +1,6 @@
 # CareInsight AI
 
-**A natural-language analytics prototype for synthetic healthcare records.** Ask a plain-English data question; the model selects a reviewed screening measure, restricted SQL, or parameterized Pandas. One app displays the calculated table, chart when suitable, plan, evidence level, and analysis trace.
+**A natural-language analytics prototype for synthetic healthcare records.** Ask a plain-English data question; the model selects a reviewed screening measure, restricted SQL, or parameterized Pandas. One app displays the calculated table, chart when suitable, plan, evidence level, and analysis trace. Aggregate results with suitable columns can be viewed as a bar chart, time-series line chart, or two-dimensional heatmap. Chart values always come from the executed analysis; the model does not generate chart pixels or executable plotting code.
 
 This is a portfolio prototype using **Synthea synthetic data**, not real patient records. Its exploratory answers are not clinical findings or validated population estimates.
 
