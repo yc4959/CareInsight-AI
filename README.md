@@ -8,6 +8,8 @@ This is a portfolio prototype using **Synthea synthetic data**, not real patient
 
 **Current scope:** All rows from four source tables are packaged with approved columns. Independently checked screening-record coverage is available for complete calendar years 2019 and 2020; other supported aggregate questions are labeled exploratory. **Full product vision and free-hosting limits:** see [Scope and roadmap](docs/scope_and_roadmap.md). The local 18-file download is about 539 MB; it is not all hosted or queryable in this version.
 
+The [2000–2021 annual data audit](docs/annual_data_audit.md) shows event counts, months with records, and screening-code rows by year. It identifies the incomplete 2021 window and a large change in procedure volume around 2011–2012; neither observation is a validated clinical trend. Regenerate it with `CAREINSIGHT_USE_DEMO_DATA=1 python -m scripts.audit_years`.
+
 ## At a glance
 
 ```mermaid

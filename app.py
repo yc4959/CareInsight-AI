@@ -63,7 +63,8 @@ with st.expander("What works now · Full product vision · Free hosting limits")
         "repository files above 100 MB, and Streamlit Community Cloud has "
         "limited memory and may put inactive apps to sleep. Uploading files "
         "alone would not make the agent understand or verify new measures. "
-        "See the [scope and roadmap](https://github.com/yc4959/CareInsight-AI/blob/main/docs/scope_and_roadmap.md), "
+        "See the [annual data audit](https://github.com/yc4959/CareInsight-AI/blob/main/docs/annual_data_audit.md), "
+        "[scope and roadmap](https://github.com/yc4959/CareInsight-AI/blob/main/docs/scope_and_roadmap.md), "
         "[GitHub limits](https://docs.github.com/en/repositories/creating-and-managing-repositories/repository-limits), "
         "and [Streamlit resource limits](https://docs.streamlit.io/deploy/streamlit-community-cloud/manage-your-app)."
     )

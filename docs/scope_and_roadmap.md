@@ -14,6 +14,8 @@ The agent accepts natural-language descriptive questions, asks for clarification
 
 The underlying event records span many decades and stop in November 2021. Historical records being present does **not** make every year complete, equally generated, or suitable for a comparable annual screening measure. The current reviewed annual coverage window is 2019–2020. A missing procedure record does not prove a screening was not performed. Condition records are not disease prevalence, and these synthetic results cannot establish real-world rates, causes, or treatment effects.
 
+The [annual data audit](annual_data_audit.md) summarizes 2000–2021 record availability and highlights an abrupt procedure-volume change around 2011–2012. It is an availability check, not approval to compare screening coverage across all those years.
+
 ## What a fuller product could support
 
 1. Add selected fields and tables from the other Synthea CSVs when a concrete question needs them, such as medication, observation, immunization, or payer records. Define joins, date semantics, missingness rules, and safe output shapes for each table before exposing it to the agent.
