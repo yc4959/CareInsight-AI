@@ -6,6 +6,24 @@ This is a portfolio prototype using **Synthea synthetic data**, not real patient
 
 **[Try the live app](https://careinsight-ai-cdcqgk3wyjhuapear6parn.streamlit.app/)** · [Source code](https://github.com/yc4959/CareInsight-AI)
 
+## At a glance
+
+```mermaid
+flowchart LR
+    Q[Plain-English question] --> M[Model selects a tool]
+    M --> V[Reviewed screening measure]
+    M --> S[Restricted SQL]
+    M --> P[Parameterized Pandas]
+    V --> I[Independent reference check]
+    S --> C[Query and result checks]
+    P --> D[DuckDB numerical cross-check]
+    I --> R[Evidence level, table, chart, trace]
+    C --> R
+    D --> R
+```
+
+**Stack:** Python 3.11, DeepSeek API, DuckDB, Pandas, Plotly, Streamlit, pytest. The current orchestration is in [`careinsight/open_analysis.py`](careinsight/open_analysis.py); the [architecture guide](docs/architecture.md) maps each active module to its role. This project uses an LLM to choose a constrained tool and plan an analysis; it does not execute model-written Python.
+
 ## Try it
 
 - “Which procedure descriptions appeared most often in 2020? Show the top 10 by number of records.”
@@ -69,7 +87,7 @@ Do not commit a populated `secrets.toml` file. The app reads these values from e
 
 ## Evaluation
 
-`evaluation/report.md` records the observed runs and failures. On fixed questions, the post-fix eight-case regression passed **8/8**, four additional wording and counting-unit cases passed **4/4**, and the unavailable-year case passed **1/1**. Two separate clarification follow-ups each passed after the requested definition was supplied. These are **small observed test runs**, not an overall accuracy estimate. Earlier failures and evaluator corrections remain in the report.
+[`evaluation/report.md`](evaluation/report.md) records the observed runs, failures, and corrections. The fixed cases include **8/8** in the post-fix regression, **4/4** wording and counting-unit cases, and **1/1** unavailable-year case: **13/13 single-turn fixed cases across three separate observed runs**, with eight executed analyses matching expected counts and five requests ending without analysis as expected. Two clarification follow-ups also passed in separate completed tests. These are **small fixed-case results**, not an overall accuracy or routing estimate. Earlier failures and evaluator corrections remain in the report. The code has **27 passing local tests** in the last recorded full run; rerun the command below to reproduce that count in your environment.
 
 Run local checks with:
 
@@ -90,4 +108,4 @@ The two benchmark commands call the configured model and consume API usage. The 
 - A passed numerical cross-check does not prove that a free-form question was interpreted correctly.
 - The SQL restrictions are for a local prototype; this is not a reviewed multi-user clinical data service.
 
-The next portfolio milestones are broader question evaluation and a short walkthrough video.
+The next portfolio milestones are a broader question evaluation and a short walkthrough video or GIF for visitors who encounter a sleeping app. A direct-LLM SQL baseline has not been run, so no comparative performance claim is made.

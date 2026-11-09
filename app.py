@@ -8,6 +8,21 @@ import streamlit as st
 
 from careinsight.open_analysis import analyze
 
+EXAMPLE_QUESTIONS = (
+    "Compare adult substance use screening record coverage by GENDER in 2020.",
+    "Which procedure descriptions appeared most often in 2020? Show the top 10 by number of records.",
+    "Which encounter types have the most substance use screening procedure records in 2020?",
+)
+
+
+def select_example(question: str) -> None:
+    """Fill the question box and start a fresh conversation without calling the model."""
+    st.session_state.explore_question_input = question
+    st.session_state.explore_result = None
+    st.session_state.explore_error = None
+    st.session_state.explore_history = []
+
+
 st.set_page_config(page_title="CareInsight AI", page_icon="📊", layout="wide")
 st.title("CareInsight AI")
 st.caption("Synthetic Synthea data · One analysis workflow · Visible evidence levels")
@@ -22,17 +37,31 @@ st.warning(
     "restrictions and result checks cannot verify every new question's meaning."
 )
 
-with st.expander("Example questions"):
+st.caption(
+    "New here? The first example is ready to analyze. Select another example to fill "
+    "the question box, or write your own. The first visit may take a moment to start."
+)
+with st.expander("Example questions", expanded=True):
+    for index, example in enumerate(EXAMPLE_QUESTIONS, start=1):
+        st.button(
+            example,
+            key=f"example_question_{index}",
+            on_click=select_example,
+            args=(example,),
+        )
+    st.caption(
+        "These are starting points. You can edit the question or ask your own descriptive question. "
+        "Recorded procedures do not establish diagnoses or completed screening."
+    )
+
+with st.expander("Evaluation: what has been checked"):
     st.markdown(
-        "- Which procedure descriptions appeared most often in 2020? Show the top 10 by number of records.\n"
-        "- Compare adult substance use screening record coverage by GENDER in 2020.\n"
-        "- Which encounter types have the most substance use screening procedure records in 2020?\n"
-        "- How many procedure records were documented by code in 2019? Show the top 10.\n\n"
-        "- Which disorder-labeled condition descriptions had the most distinct patients "
-        "with a new record in 2019? Show the top 5.\n\n"
-        "The source is synthetic; recorded procedures do not establish diagnoses, "
-        "actual screening completion, or effects of care. The conditions table "
-        "also includes findings and social factors, so it is not a disease-only list."
+        "**13/13 fixed single-turn cases passed across three separate post-fix observed runs:** "
+        "8 executed questions matched expected counts and 5 ambiguous or unsupported requests "
+        "ended without analysis. Two clarification follow-ups also passed in separate completed "
+        "tests. These are small fixed-case results, not a general accuracy or routing estimate. "
+        "Earlier failures and evaluator corrections are documented in "
+        "[the evaluation report](https://github.com/yc4959/CareInsight-AI/blob/main/evaluation/report.md)."
     )
 
 if not all(os.getenv(key) for key in (
@@ -43,11 +72,14 @@ if not all(os.getenv(key) for key in (
 
 if "explore_history" not in st.session_state:
     st.session_state.explore_history = []
+if "explore_question_input" not in st.session_state:
+    st.session_state.explore_question_input = EXAMPLE_QUESTIONS[0]
 
 if st.button("Start a new question"):
     st.session_state.explore_result = None
     st.session_state.explore_error = None
     st.session_state.explore_history = []
+    st.session_state.explore_question_input = EXAMPLE_QUESTIONS[0]
     st.rerun()
 
 previous = st.session_state.get("explore_result")
@@ -67,6 +99,7 @@ else:
         question = st.text_input(
             "Your analysis question",
             placeholder="Which procedure descriptions appeared most often in 2020?",
+            key="explore_question_input",
         )
         submitted = st.form_submit_button("Analyze")
 
