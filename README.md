@@ -6,6 +6,8 @@ This is a portfolio prototype using **Synthea synthetic data**, not real patient
 
 **[Try the live app](https://careinsight-ai-cdcqgk3wyjhuapear6parn.streamlit.app/)** · [Source code](https://github.com/yc4959/CareInsight-AI)
 
+**Current scope:** All rows from four source tables are packaged with approved columns. Independently checked screening-record coverage is available for complete calendar years 2019 and 2020; other supported aggregate questions are labeled exploratory. **Full product vision and free-hosting limits:** see [Scope and roadmap](docs/scope_and_roadmap.md). The local 18-file download is about 539 MB; it is not all hosted or queryable in this version.
+
 ## At a glance
 
 ```mermaid
@@ -57,7 +59,7 @@ The adult screening measures are **custom demonstration measures**, not official
 
 ## Data and local setup
 
-The repository includes four small gzip CSV files under `data/demo/`. They are a column subset of Synthea's public **1K sample CSV** under Previous Versions (2019–2021) on the [Synthea downloads page](https://synthetichealth.github.io/downloads.html). They contain synthetic records and no names or addresses. See `data/demo/README.md` for provenance and citation, and `data/demo/manifest.json` for row counts and file hashes. The packaged event files contain records through 2021; this does not make every historical year or partial year comparable.
+The repository includes four small gzip CSV files under `data/demo/`. They contain **all rows from those four source tables**, but only approved columns, from Synthea's public **1K sample CSV** under Previous Versions (2019–2021) on the [Synthea downloads page](https://synthetichealth.github.io/downloads.html). They contain synthetic records and no names or addresses. See `data/demo/README.md` for provenance and citation, and `data/demo/manifest.json` for row counts and file hashes. The packaged event files contain records through 2021; this does not make every historical year or partial year comparable.
 
 The app uses the packaged data automatically. To regenerate them from the original download, extract the CSVs into `data/csv/` and run `python scripts/build_demo_data.py`. Original CSVs are excluded from Git. Set `CAREINSIGHT_USE_DEMO_DATA=1` to force the packaged copy when both are present. Patient and encounter IDs remain in the packaged files to support joins; the app restricts queries from returning individual identifiers.
 
@@ -75,6 +77,8 @@ The main app requires `DEEPSEEK_API_KEY`, `DEEPSEEK_BASE_URL`, and `DEEPSEEK_MOD
 ## Deploy on Streamlit Community Cloud
 
 After the project is published to GitHub, create a Community Cloud app using `app.py` as the entry point. Select Python 3.11 in Advanced settings to match the tested local environment. The repository's `requirements.txt` supplies Python dependencies and `data/demo/` supplies the synthetic demonstration data; the 539 MB original CSV download is not needed on the server.
+
+The full local download has 18 CSV files, including one about 296 MB. GitHub's ordinary single-file limit is 100 MB, and Community Cloud's memory limits make loading the raw files unsuitable for this free demo. An inactive Community Cloud app may sleep and require a visitor to wake it. [Scope and roadmap](docs/scope_and_roadmap.md) distinguishes these hosting constraints from what analyses the data could eventually support.
 
 Add these three **root-level** values in Community Cloud's Secrets settings, using the provider values that worked locally:
 

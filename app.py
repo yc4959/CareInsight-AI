@@ -40,6 +40,34 @@ st.warning(
     "restrictions and result checks cannot verify every new question's meaning."
 )
 
+with st.expander("What works now · Full product vision · Free hosting limits"):
+    st.markdown(
+        "**Available now**\n\n"
+        "The hosted app contains **all rows** from four Synthea tables: patients, "
+        "encounters, procedures, and conditions. Only approved analysis columns are "
+        "packaged. You can ask descriptive aggregate questions about these records. "
+        "The two custom adult screening-record measures are independently checked "
+        "for full calendar years 2019 and 2020, including a comparison between "
+        "those years. Other years and questions may be explored as records, but "
+        "they do not inherit that verified-measure label. The sample ends in "
+        "November 2021.\n\n"
+        "**Full product vision**\n\n"
+        "Add useful fields and tables from the larger Synthea download, then "
+        "define and independently check each new cohort, measure, time window, "
+        "and chart before calling its result verified. Expand the agent's tool "
+        "choices and evaluation as the supported analyses grow. These are planned "
+        "capabilities, not features of this live demo.\n\n"
+        "**Why the whole download is not hosted here**\n\n"
+        "The local source download has 18 CSV files and is about 539 MB "
+        "uncompressed; its largest CSV is about 296 MB. GitHub blocks ordinary "
+        "repository files above 100 MB, and Streamlit Community Cloud has "
+        "limited memory and may put inactive apps to sleep. Uploading files "
+        "alone would not make the agent understand or verify new measures. "
+        "See the [scope and roadmap](https://github.com/yc4959/CareInsight-AI/blob/main/docs/scope_and_roadmap.md), "
+        "[GitHub limits](https://docs.github.com/en/repositories/creating-and-managing-repositories/repository-limits), "
+        "and [Streamlit resource limits](https://docs.streamlit.io/deploy/streamlit-community-cloud/manage-your-app)."
+    )
+
 st.caption(
     "New here? The first example is ready to analyze. Select another example to fill "
     "the question box, or write your own. The first visit may take a moment to start."
