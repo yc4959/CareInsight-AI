@@ -200,6 +200,7 @@ if result and not pending:
                         line_color="#168B85", marker_color="#168B85",
                         textposition="top center",
                     )
+                    chart.update_xaxes(type="category")
                 else:
                     chart.update_traces(marker_color="#168B85", textposition="outside")
                 chart.update_layout(yaxis_range=[0, 105], showlegend=False)
