@@ -16,15 +16,15 @@ def get_screening_summary(
         raise ValueError("Supported metrics: depression, substance_use.")
     if group_by not in {"overall", "age_group", "gender"}:
         raise ValueError("Supported groupings: overall, age_group, gender.")
-    if type(year) is not int or year != 2020:
-        raise ValueError("Only the validated year 2020 is supported.")
+    if type(year) is not int or year not in {2019, 2020}:
+        raise ValueError("Only reviewed full years 2019 and 2020 are supported.")
 
     patients = pd.read_csv(source_path("patients"), dtype="string")
     encounters = pd.read_csv(source_path("encounters"), dtype="string")
     procedures = pd.read_csv(source_path("procedures"), dtype="string")
 
-    start = pd.Timestamp("2020-01-01", tz="UTC")
-    end = pd.Timestamp("2021-01-01", tz="UTC")
+    start = pd.Timestamp(f"{year}-01-01", tz="UTC")
+    end = pd.Timestamp(f"{year + 1}-01-01", tz="UTC")
 
     encounter_dates = pd.to_datetime(encounters["START"], utc=True)
     visited = set(encounters.loc[
@@ -34,8 +34,8 @@ def get_screening_summary(
     birth = pd.to_datetime(patients["BIRTHDATE"], errors="raise")
     death = pd.to_datetime(patients["DEATHDATE"], errors="raise")
     eligible = (
-        (birth <= pd.Timestamp("2002-01-01"))
-        & (death.isna() | (death > pd.Timestamp("2020-12-31")))
+        (birth <= pd.Timestamp(f"{year - 18}-01-01"))
+        & (death.isna() | (death > pd.Timestamp(f"{year}-12-31")))
         & patients["Id"].isin(visited)
     )
     cohort = patients.loc[eligible].copy()
@@ -57,7 +57,7 @@ def get_screening_summary(
     before_birthday = (
         (cohort_birth.dt.month > 1) | (cohort_birth.dt.day > 1)
     )
-    age = 2020 - cohort_birth.dt.year - before_birthday.astype(int)
+    age = year - cohort_birth.dt.year - before_birthday.astype(int)
     cohort["age_group"] = pd.cut(
         age,
         bins=[18, 40, 65, float("inf")],
@@ -126,16 +126,16 @@ def get_screening_summary(
         }[metric],
         "year": year,
         "data_source": "Synthea synthetic patient data",
-        "age_as_of": "2020-01-01",
+        "age_as_of": f"{year}-01-01",
         "group_by": group_by,
         "group_source": {
             "overall": "All eligible adults",
-            "age_group": "Age on 2020-01-01 derived from BIRTHDATE",
+            "age_group": f"Age on {year}-01-01 derived from BIRTHDATE",
             "gender": "Original GENDER field; missing values labeled Unknown",
         }[group_by],
         "denominator_definition": (
-            "Age 18+ on 2020-01-01; no recorded death or death after "
-            "2020-12-31; at least one encounter starting in 2020. "
+            f"Age 18+ on {year}-01-01; no recorded death or death after "
+            f"{year}-12-31; at least one encounter starting in {year}. "
             "All encounter types included."
         ),
         "groups": groups,

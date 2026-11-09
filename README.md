@@ -27,6 +27,7 @@ flowchart LR
 ## Try it
 
 - “Which procedure descriptions appeared most often in 2020? Show the top 10 by number of records.”
+- “How did adult depression screening record coverage change between 2019 and 2020?”
 - “In 2019, which procedure codes involved the most different patients? Show the top five codes.”
 - “Which encounter types have the most substance use screening procedure records in 2020?”
 - “2019 top five” is deliberately incomplete; the agent should clarify what to rank.
@@ -37,7 +38,7 @@ The app accepts open-text descriptive questions over the exposed data. It cannot
 ## What happens after a question
 
 1. The model interprets the request and selects a reviewed screening tool, **restricted aggregate SQL**, or **parameterized Pandas**.
-2. For a reviewed 2020 screening measure, code builds SQL from the selected measure and grouping, then compares every count with an independent Pandas reference. Other generated SQL receives structural and arithmetic checks.
+2. For a reviewed 2019 or 2020 screening measure, code builds SQL from the selected measure, year, and grouping, then compares every count with an independent Pandas reference. The two-year comparison checks each annual cohort separately. Other generated SQL receives structural and arithmetic checks.
 3. Pandas aggregations are recomputed in DuckDB using the same selected parameters. This checks the numbers, **not** whether the selected parameters match the user's intent.
 4. The app shows a table, chart when suitable, source tables, tool parameters or SQL, and checks performed.
 
@@ -47,12 +48,12 @@ The exploratory tool uses `patients`, `encounters`, `procedures`, and `condition
 
 | Result shown in `app.py` | Purpose | Evidence level |
 | --- | --- | --- |
-| Independently checked screening result | A defined 2020 adult depression or substance-use screening record measure, overall or by age group or GENDER. | SQL counts must match the independent reference for every group before publication. The model's choice of measure and grouping is checked against the question. |
+| Independently checked screening result | A defined 2019 or 2020 adult depression or substance-use screening record measure, overall or by age group or GENDER; or a 2019–2020 comparison of separate annual cohorts. | SQL counts must match the independent reference for every group or year before publication. The model's choice of measure, grouping, and year is checked against the question. |
 | Exploratory result | Other descriptive questions over approved synthetic tables, including procedure and encounter counts. | Query restrictions and result checks. Pandas counts also receive a cross-tool numerical check; arbitrary SQL meanings are not independently audited. |
 
 Earlier interfaces are retained under `legacy/` for project history; `app.py` is the single main entry point.
 
-The 2020 adult screening measures are **custom demonstration measures**, not official quality metrics. Their denominator, code lists, and time windows are documented in `docs/metric_definition.md` and `docs/substance_use_screening_metric.md`.
+The adult screening measures are **custom demonstration measures**, not official quality metrics. Their denominator, code lists, and time windows are documented in `docs/metric_definition.md`, `docs/substance_use_screening_metric.md`, and [`docs/annual_comparison.md`](docs/annual_comparison.md). The 2021 event files stop in November; a full-year 2021 comparison is not offered.
 
 ## Data and local setup
 
@@ -87,7 +88,7 @@ Do not commit a populated `secrets.toml` file. The app reads these values from e
 
 ## Evaluation
 
-[`evaluation/report.md`](evaluation/report.md) records the observed runs, failures, and corrections. The fixed cases include **8/8** in the post-fix regression, **4/4** wording and counting-unit cases, and **1/1** unavailable-year case: **13/13 single-turn fixed cases across three separate observed runs**, with eight executed analyses matching expected counts and five requests ending without analysis as expected. Two clarification follow-ups also passed in separate completed tests. These are **small fixed-case results**, not an overall accuracy or routing estimate. Earlier failures and evaluator corrections remain in the report. The code has **27 passing local tests** in the last recorded full run; rerun the command below to reproduce that count in your environment.
+[`evaluation/report.md`](evaluation/report.md) records the observed runs, failures, and corrections. The fixed cases include **8/8** in the post-fix regression, **4/4** wording and counting-unit cases, and **1/1** unavailable-year case: **13/13 single-turn fixed cases across three separate observed runs**, with eight executed analyses matching expected counts and five requests ending without analysis as expected. Two clarification follow-ups also passed in separate completed tests. These are **small fixed-case results**, not an overall accuracy or routing estimate. Earlier failures and evaluator corrections remain in the report. The latest full offline test run passed **42 tests**, including 12 independent annual SQL–Pandas comparisons; the new live model route is checked separately below.
 
 Run local checks with:
 

@@ -10,6 +10,7 @@ from careinsight.open_analysis import analyze
 
 EXAMPLE_QUESTIONS = (
     "Compare adult substance use screening record coverage by GENDER in 2020.",
+    "How did adult depression screening record coverage change between 2019 and 2020?",
     "Which procedure descriptions appeared most often in 2020? Show the top 10 by number of records.",
     "Which encounter types have the most substance use screening procedure records in 2020?",
 )
@@ -33,7 +34,9 @@ st.info(
 )
 st.warning(
     "Verified screening results match an independently calculated reference "
-    "for a defined 2020 measure. Other questions remain exploratory: query "
+    "for defined 2019 and 2020 annual measures. The 2021 sample stops in "
+    "November and is not used for full-year comparisons. Other questions "
+    "remain exploratory: query "
     "restrictions and result checks cannot verify every new question's meaning."
 )
 
@@ -145,6 +148,7 @@ if result and not pending:
     if result["status"] in {"exploratory", "validated"}:
         validated = result["status"] == "validated"
         tool_label = (
+            "Verified annual screening SQL" if result["tool"] == "run_verified_screening_trend" else
             "Verified screening SQL" if validated else
             "Parameterized Pandas" if result["tool"] == "run_pandas_aggregate"
             else "Read-only SQL"
@@ -174,19 +178,35 @@ if result and not pending:
                     if row["denominator"] else None, axis=1
                 ).round(2)
                 st.dataframe(frame, hide_index=True, width="stretch")
-                chart = px.bar(
-                    frame, x="group_name", y="coverage_percent",
-                    text=frame["coverage_percent"].map(
-                        lambda value: f"{value:.2f}%" if pd.notna(value) else "N/A"
-                    ),
-                    labels={"group_name": "Group", "coverage_percent": "Screening record coverage (%)"},
+                chart_values = frame["coverage_percent"].map(
+                    lambda value: f"{value:.2f}%" if pd.notna(value) else "N/A"
                 )
+                if reference.get("trend"):
+                    chart = px.line(
+                        frame, x="group_name", y="coverage_percent",
+                        markers=True, text=chart_values,
+                        labels={"group_name": "Calendar year",
+                                "coverage_percent": "Screening record coverage (%)"},
+                    )
+                else:
+                    chart = px.bar(
+                        frame, x="group_name", y="coverage_percent",
+                        text=chart_values,
+                        labels={"group_name": "Group",
+                                "coverage_percent": "Screening record coverage (%)"},
+                    )
                 chart.update_traces(marker_color="#168B85", textposition="outside")
                 chart.update_layout(yaxis_range=[0, 105], showlegend=False)
                 st.plotly_chart(chart, width="stretch")
                 st.caption(reference["denominator_definition"] + " " +
                            "Missing screening documentation does not prove screening was not done. "
                            "Synthetic group differences are descriptive only.")
+                if reference.get("trend"):
+                    st.caption(
+                        "This compares separate annual cohorts, not the same patients "
+                        "followed over time. A change in synthetic record coverage does "
+                        "not establish a real-world trend or a causal effect."
+                    )
             else:
                 st.dataframe(frame, hide_index=True, width="stretch")
                 numeric = [column for column in frame if pd.api.types.is_numeric_dtype(frame[column])]
@@ -225,7 +245,8 @@ if result and not pending:
             )
         with st.expander("Analysis trace: tool, query, and checks"):
             st.write("**Source tables:**", ", ".join(query["source_tables"]))
-            if result["tool"] in {"run_aggregate_sql", "run_verified_screening"}:
+            if result["tool"] in {"run_aggregate_sql", "run_verified_screening",
+                                  "run_verified_screening_trend"}:
                 st.code(query["sql"], language="sql")
             else:
                 st.json(query["operation"])

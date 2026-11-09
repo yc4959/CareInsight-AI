@@ -66,14 +66,21 @@ For condition questions, explain in the plan whether START means new records
 in the year or START/STOP overlap means records active during the year.
 
 Choose among three tools yourself:
-- run_verified_screening for the custom 2020 adult depression or substance-use
+- run_verified_screening for the custom 2019 or 2020 adult depression or substance-use
   screening RECORD coverage measure, overall or by age group or GENDER. Choose
   metric and group_by; the tool builds reviewed SQL from those parameters and
   independently calculates the reference cohort. It compares every group
   count before publishing. Do not
-  use this tool for encounter-type procedure counts, diagnosis, other years,
+  use this tool for encounter-type procedure counts, diagnosis, 2021 or later,
   custom filters, or a different measure. A validated count is still synthetic
   and does not prove clinical screening completion.
+- run_verified_screening_trend only when the user explicitly asks to compare
+  2019 with 2020 for one of those two screening-record measures. It calculates
+  a separate annual eligible cohort and independently checks each year's
+  numerator and denominator. The percentages are descriptive and based on
+  changing annual cohorts, not a longitudinal follow-up of the same people.
+  2021 is incomplete in this sample (records stop in November), so do not
+  compare its annual coverage with complete calendar years.
 - run_pandas_aggregate for a single table with a START-year filter, one
   optional exact-value filter, one grouping, and row or unique-patient count.
   Supply table, year (0 means no filter), group_by (or 'none'), aggregation,
@@ -92,20 +99,30 @@ When clarifying an ambiguous request, keep any explicit year and ask only for
 the missing subject or counting unit. Offer only supported aggregate examples;
 never suggest listing or ranking individual patients.
 The application will display the SQL or Pandas parameters and exact result.
-Only run_verified_screening may receive an independent-metric-reference label,
+Only run_verified_screening and run_verified_screening_trend may receive an independent-metric-reference label,
 and only after the code check passes. Other analyses remain exploratory. Do
 not claim any result is clinically validated or statistically significant.
 """
 
 TOOLS = [{"type": "function", "function": {
     "name": "run_verified_screening",
-    "description": "Calculate one reviewed 2020 adult screening-record measure using SQL and compare all counts against an independent reference implementation. Supply measure and grouping, not SQL source.",
+    "description": "Calculate one reviewed 2019 or 2020 adult screening-record measure using SQL and compare all counts against an independent reference implementation. Supply measure and grouping, not SQL source.",
     "parameters": {"type": "object", "properties": {
         "metric": {"type": "string", "enum": ["depression", "substance_use"]},
         "group_by": {"type": "string", "enum": ["overall", "age_group", "gender"]},
-        "year": {"type": "integer", "enum": [2020]},
+        "year": {"type": "integer", "enum": [2019, 2020]},
         "plan": {"type": "string"},
     }, "required": ["metric", "group_by", "year", "plan"],
+    "additionalProperties": False},
+}}, {"type": "function", "function": {
+    "name": "run_verified_screening_trend",
+    "description": "Compare the same adult screening-record measure in complete calendar years 2019 and 2020. Annual cohorts and every count are independently checked. Not a same-patient longitudinal analysis.",
+    "parameters": {"type": "object", "properties": {
+        "metric": {"type": "string", "enum": ["depression", "substance_use"]},
+        "start_year": {"type": "integer", "enum": [2019]},
+        "end_year": {"type": "integer", "enum": [2020]},
+        "plan": {"type": "string"},
+    }, "required": ["metric", "start_year", "end_year", "plan"],
     "additionalProperties": False},
 }}, {"type": "function", "function": {
     "name": "run_aggregate_sql",
@@ -139,7 +156,8 @@ def _parse_call(reply):
     if len(calls) != 1:
         raise ValueError("Expected exactly one analysis tool call.")
     name = calls[0].get("function", {}).get("name")
-    if name not in {"run_verified_screening", "run_aggregate_sql", "run_pandas_aggregate"}:
+    if name not in {"run_verified_screening", "run_verified_screening_trend",
+                    "run_aggregate_sql", "run_pandas_aggregate"}:
         raise ValueError("Unknown analysis tool.")
     try:
         args = json.loads(calls[0]["function"]["arguments"])
@@ -151,8 +169,14 @@ def _parse_call(reply):
         if (set(args) != {"metric", "group_by", "year", "plan"}
                 or args["metric"] not in {"depression", "substance_use"}
                 or args["group_by"] not in {"overall", "age_group", "gender"}
-                or type(args["year"]) is not int or args["year"] != 2020):
+                or type(args["year"]) is not int or args["year"] not in {2019, 2020}):
             raise ValueError("Verified screening arguments do not match the contract.")
+    elif name == "run_verified_screening_trend":
+        if (set(args) != {"metric", "start_year", "end_year", "plan"}
+                or args["metric"] not in {"depression", "substance_use"}
+                or type(args["start_year"]) is not int or args["start_year"] != 2019
+                or type(args["end_year"]) is not int or args["end_year"] != 2020):
+            raise ValueError("Verified trend arguments do not match the contract.")
     elif name == "run_aggregate_sql":
         if set(args) != {"plan", "sql"} or not isinstance(args["sql"], str) or not args["sql"].strip():
             raise ValueError("A nonempty SQL query is required.")
@@ -252,7 +276,8 @@ def _verified_request_matches(question, history, args):
         [item["content"] for item in history if item["role"] == "user"]
         + [question]
     ).lower()
-    if _requested_years(question, history) - {2020}:
+    years = _requested_years(question, history)
+    if (years and years != {args["year"]}) or (not years and args["year"] != 2020):
         return False
     if re.search(r"\b(diagnos(?:is|es|ed)|prevalence|cause|treatment)\b", user_text):
         return False
@@ -274,6 +299,27 @@ def _verified_request_matches(question, history, args):
         return False
     group = "age_group" if age else "gender" if gender else "overall"
     return args["group_by"] == group
+
+
+def _verified_trend_request_matches(question, history, args):
+    """Require an explicit two-year screening comparison before using the trend tool."""
+    user_text = " ".join(
+        [item["content"] for item in history if item["role"] == "user"]
+        + [question]
+    ).lower()
+    if _requested_years(question, history) != {2019, 2020}:
+        return False
+    if re.search(r"\b(diagnos(?:is|es|ed)|prevalence|cause|treatment)\b", user_text):
+        return False
+    if not re.search(r"\bscreen(?:ing|ings|ed)?\b", user_text):
+        return False
+    if not re.search(r"\b(change|trend|compare|comparison|difference|between|versus|vs)\b", user_text):
+        return False
+    depression = bool(re.search(r"\bdepression\b", user_text))
+    substance = bool(re.search(r"\b(substance|drug)\b", user_text))
+    if depression == substance:
+        return False
+    return args["metric"] == ("depression" if depression else "substance_use")
 
 
 def _request_boundary(question):
@@ -364,6 +410,43 @@ def analyze(question, history=None):
                     group_by=args["group_by"],
                 )
                 query = run_aggregate_sql(sql)
+            elif tool_name == "run_verified_screening_trend":
+                if not _verified_trend_request_matches(question, history, args):
+                    raise ValueError("The requested years or screening measure do not match the trend tool.")
+                annual = []
+                sql_parts = []
+                rows = []
+                for year in (2019, 2020):
+                    annual_reference = get_screening_summary(
+                        year=year, metric=args["metric"], group_by="overall"
+                    )
+                    sql = build_verified_screening_sql(
+                        year=year, metric=args["metric"], group_by="overall"
+                    )
+                    annual_query = run_aggregate_sql(sql)
+                    _validate_verified_screening(annual_query, annual_reference)
+                    annual.append(annual_reference)
+                    annual_row = annual_query["rows"][0]
+                    rows.append({"group_name": str(year),
+                                 "denominator": annual_row["denominator"],
+                                 "numerator": annual_row["numerator"]})
+                    sql_parts.append(f"-- Executed for {year}\n{annual_query['sql']}")
+                query = {"sql": "\n\n".join(sql_parts),
+                         "source_tables": ["encounters", "patients", "procedures"],
+                         "row_count": len(rows), "rows": rows}
+                reference = {"metric_name": annual[0]["metric_name"],
+                             "year": "2019–2020", "trend": True,
+                             "groups": [{"group": row["group_name"],
+                                         "denominator": row["denominator"],
+                                         "numerator": row["numerator"]} for row in rows],
+                             "denominator_definition": (
+                                 "Each year has its own cohort: age 18+ on January 1, "
+                                 "no recorded death through December 31, and at least "
+                                 "one encounter starting that calendar year. The cohorts "
+                                 "may differ between years. 2021 is incomplete in this sample."
+                             )}
+                attempt["parameters"] = {"metric": args["metric"],
+                                         "start_year": 2019, "end_year": 2020}
             elif tool_name == "run_aggregate_sql":
                 attempt["sql"] = args["sql"]
                 query = run_aggregate_sql(args["sql"])
@@ -379,7 +462,7 @@ def analyze(question, history=None):
                 )]
                 checks.append(
                     "The selected measure and grouping matched the request, and all "
-                    "group counts matched an independently calculated 2020 reference."
+                    "group counts matched independently calculated annual references."
                 )
             cross_check = None
             if tool_name == "run_pandas_aggregate":
@@ -407,7 +490,8 @@ def analyze(question, history=None):
                                  ". Correct the analysis and call one available tool."})
             continue
         attempt["status"] = "validated" if reference is not None else "executed"
-        if tool_name in {"run_aggregate_sql", "run_verified_screening"}:
+        if tool_name in {"run_aggregate_sql", "run_verified_screening",
+                         "run_verified_screening_trend"}:
             attempt["sql"] = query["sql"]
         return {"status": "validated" if reference is not None else "exploratory",
                 "question": question,
