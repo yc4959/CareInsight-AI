@@ -195,7 +195,13 @@ if result and not pending:
                         labels={"group_name": "Group",
                                 "coverage_percent": "Screening record coverage (%)"},
                     )
-                chart.update_traces(marker_color="#168B85", textposition="outside")
+                if reference.get("trend"):
+                    chart.update_traces(
+                        line_color="#168B85", marker_color="#168B85",
+                        textposition="top center",
+                    )
+                else:
+                    chart.update_traces(marker_color="#168B85", textposition="outside")
                 chart.update_layout(yaxis_range=[0, 105], showlegend=False)
                 st.plotly_chart(chart, width="stretch")
                 st.caption(reference["denominator_definition"] + " " +
