@@ -1,136 +1,217 @@
+"""One CareInsight UI for independently checked and exploratory analyses."""
+
+import os
+
 import pandas as pd
-import plotly.graph_objects as go
+import plotly.express as px
 import streamlit as st
 
-from careinsight.summary_tool import get_screening_summary
+from careinsight.open_analysis import analyze
 
-st.set_page_config(
-    page_title="CareInsight AI",
-    page_icon="📊",
-    layout="wide",
-)
-
+st.set_page_config(page_title="CareInsight AI", page_icon="📊", layout="wide")
 st.title("CareInsight AI")
-st.caption("Population Health Analytics · Synthea Demo · 2020")
+st.caption("Synthetic Synthea data · One analysis workflow · Visible evidence levels")
 st.info(
-    "Synthetic patient data · Custom screening record metric · "
-    "Not an official quality measure"
+    "Ask a descriptive question about patients, encounters, or procedure records. "
+    "The agent selects a verified screening measure, read-only SQL, or a "
+    "parameterized Pandas analysis."
+)
+st.warning(
+    "Verified screening results match an independently calculated reference "
+    "for a defined 2020 measure. Other questions remain exploratory: query "
+    "restrictions and result checks cannot verify every new question's meaning."
 )
 
-with st.sidebar:
-    st.header("Analysis settings")
-    st.selectbox("Measurement year", [2020])
-    grouping = st.radio(
-        "Compare populations",
-        ["age_group", "gender"],
-        format_func=lambda value: {
-            "age_group": "Age group",
-            "gender": "GENDER field",
-        }[value],
-    )
-    st.caption(
-        "All views use the same eligible population. "
-        "Changing the grouping does not change the denominator."
+with st.expander("Example questions"):
+    st.markdown(
+        "- Which procedure descriptions appeared most often in 2020? Show the top 10 by number of records.\n"
+        "- Compare adult substance use screening record coverage by GENDER in 2020.\n"
+        "- Which encounter types have the most substance use screening procedure records in 2020?\n"
+        "- How many procedure records were documented by code in 2019? Show the top 10.\n\n"
+        "- Which disorder-labeled condition descriptions had the most distinct patients "
+        "with a new record in 2019? Show the top 5.\n\n"
+        "The source is synthetic; recorded procedures do not establish diagnoses, "
+        "actual screening completion, or effects of care. The conditions table "
+        "also includes findings and social factors, so it is not a disease-only list."
     )
 
-try:
-    overall_result = get_screening_summary(group_by="overall")
-    grouped_result = get_screening_summary(group_by=grouping)
-except (OSError, ValueError, KeyError):
-    st.error("Unable to load the analysis. Check the source CSV files.")
+if not all(os.getenv(key) for key in (
+    "DEEPSEEK_API_KEY", "DEEPSEEK_BASE_URL", "DEEPSEEK_MODEL"
+)):
+    st.error("The model connection is not configured in this server session.")
     st.stop()
 
-overall = overall_result["groups"][0]
-columns = st.columns(4)
+if "explore_history" not in st.session_state:
+    st.session_state.explore_history = []
 
-columns[0].metric("Eligible patients", f'{overall["denominator"]:,}')
-columns[1].metric("Screening recorded", f'{overall["numerator"]:,}')
-columns[2].metric("No screening record", f'{overall["not_recorded"]:,}')
-columns[3].metric("Record coverage", f'{overall["coverage"]:.2%}')
+if st.button("Start a new question"):
+    st.session_state.explore_result = None
+    st.session_state.explore_error = None
+    st.session_state.explore_history = []
+    st.rerun()
 
-st.caption("No screening record does not mean screening was not performed.")
-
-st.subheader("Screening record coverage by population")
-frame = pd.DataFrame(grouped_result["groups"])
-
-figure = go.Figure(go.Bar(
-    x=frame["group"],
-    y=frame["coverage"],
-    text=[f"{value:.2%}" for value in frame["coverage"]],
-    textposition="outside",
-    marker_color="#168B85",
-    customdata=frame[["numerator", "denominator"]].to_numpy(),
-    hovertemplate=(
-        "Group: %{x}<br>"
-        "Coverage: %{y:.2%}<br>"
-        "Screening recorded: %{customdata[0]}<br>"
-        "Eligible patients: %{customdata[1]}"
-        "<extra></extra>"
-    ),
-))
-figure.update_layout(
-    height=380,
-    template="plotly_white",
-    xaxis_title="Age group" if grouping == "age_group" else "GENDER",
-    yaxis_title="Screening record coverage",
-    yaxis_range=[0, 1],
-    yaxis_tickformat=".0%",
-    showlegend=False,
-    margin=dict(t=35, b=35),
-)
-st.plotly_chart(figure, width="stretch")
-
-comparison = grouped_result["comparison"]
-if comparison:
-    lowest = ", ".join(comparison["lowest_groups"])
-    highest = ", ".join(comparison["highest_groups"])
-    gap = comparison["gap_percentage_points"]
-    st.write(
-        f"**Lowest observed coverage:** {lowest}. "
-        f"**Highest observed coverage:** {highest}. "
-        f"**Highest-to-lowest gap:** {gap:.2f} percentage points."
-    )
-
-st.caption(
-    "Descriptive comparison only. Statistical significance and causes "
-    "have not been established."
-)
-
-table = frame.rename(columns={
-    "group": "Group",
-    "numerator": "Screening recorded",
-    "denominator": "Eligible patients",
-    "not_recorded": "No screening record",
-    "coverage": "Coverage",
-})
-table["Coverage"] = table["Coverage"].map(lambda value: f"{value:.2%}")
-st.dataframe(
-    table[[
-        "Group", "Screening recorded", "Eligible patients",
-        "No screening record", "Coverage",
-    ]],
-    hide_index=True,
-)
-
-with st.expander("Metric definition and limitations"):
-    st.write("**Denominator:**", grouped_result["denominator_definition"])
-    st.write(
-        "**Numerator:** Eligible patients with at least one procedure "
-        "record in 2020 using code 171207006, 454711000124102, or 715252007. "
-        "Each patient is counted once."
-    )
-    st.write(
-        "**Time window:** 2020-01-01 inclusive to 2021-01-01 exclusive, UTC."
-    )
-    st.write("**Grouping source:**", grouped_result["group_source"])
-    if grouped_result["missing_group_count"] is not None:
-        st.write(
-            "**Missing grouping values:**",
-            grouped_result["missing_group_count"],
+previous = st.session_state.get("explore_result")
+pending = (previous is not None and previous["status"] == "no_analysis"
+           and len(st.session_state.explore_history) < 4)
+if pending:
+    st.write("**Original question:**", (
+        st.session_state.explore_history[0]["content"]
+        if st.session_state.explore_history else previous["question"]
+    ))
+    st.info(previous["message"])
+    with st.form("explore_clarification"):
+        question = st.text_input("Your answer")
+        submitted = st.form_submit_button("Continue")
+else:
+    with st.form("explore_question"):
+        question = st.text_input(
+            "Your analysis question",
+            placeholder="Which procedure descriptions appeared most often in 2020?",
         )
-    for limitation in grouped_result["limitations"]:
-        st.write("- " + limitation)
+        submitted = st.form_submit_button("Analyze")
 
+if submitted:
+    history = st.session_state.explore_history.copy() if pending else []
+    if pending:
+        history.extend([
+            {"role": "user", "content": previous["question"]},
+            {"role": "assistant", "content": previous["message"]},
+        ])
+    st.session_state.explore_result = None
+    st.session_state.explore_error = None
+    if not question.strip():
+        st.session_state.explore_error = (
+            "Answer the clarification." if pending else "Enter a question before analyzing."
+        )
+        if pending:
+            st.session_state.explore_result = previous
+    else:
+        try:
+            with st.spinner("Choosing a tool, running the analysis, and checking the result..."):
+                st.session_state.explore_result = analyze(question.strip(), history=history)
+            st.session_state.explore_history = history
+        except (ValueError, RuntimeError) as exc:
+            st.session_state.explore_error = str(exc)
+        except Exception:
+            st.session_state.explore_error = (
+                "The analysis could not be completed. No result was published."
+            )
+    st.rerun()
 
-from careinsight.chat_ui import render_chat
-render_chat()
+if st.session_state.get("explore_error"):
+    st.error(st.session_state.explore_error)
+
+result = st.session_state.get("explore_result")
+if result and not pending:
+    st.subheader("Your request")
+    if st.session_state.explore_history:
+        st.write(st.session_state.explore_history[0]["content"])
+        st.write("**Clarification answer:**", result["question"])
+    else:
+        st.write(result["question"])
+    if result["status"] in {"exploratory", "validated"}:
+        validated = result["status"] == "validated"
+        tool_label = (
+            "Verified screening SQL" if validated else
+            "Parameterized Pandas" if result["tool"] == "run_pandas_aggregate"
+            else "Read-only SQL"
+        )
+        st.subheader("Independently checked screening result" if validated
+                     else "Exploratory result")
+        st.write("**Tool selected by the model:**", tool_label)
+        st.write("**Analysis plan:**", result["plan"])
+        if validated:
+            reference = result["metric_reference"]
+            st.success("Every group count matched the independently calculated screening reference.")
+            st.write("**Measure:**", reference["metric_name"], "· **Year:**", reference["year"])
+        if result.get("cross_check"):
+            st.success(
+                "Numerical cross-check passed: Pandas and an independently "
+                "executed SQL query returned the same counts."
+            )
+        query = result["query"]
+        rows = query["rows"]
+        if not rows:
+            st.info("The query returned no rows.")
+        else:
+            frame = pd.DataFrame(rows)
+            if validated:
+                frame["coverage_percent"] = frame.apply(
+                    lambda row: 100 * row["numerator"] / row["denominator"]
+                    if row["denominator"] else None, axis=1
+                ).round(2)
+                st.dataframe(frame, hide_index=True, width="stretch")
+                chart = px.bar(
+                    frame, x="group_name", y="coverage_percent",
+                    text=frame["coverage_percent"].map(
+                        lambda value: f"{value:.2f}%" if pd.notna(value) else "N/A"
+                    ),
+                    labels={"group_name": "Group", "coverage_percent": "Screening record coverage (%)"},
+                )
+                chart.update_traces(marker_color="#168B85", textposition="outside")
+                chart.update_layout(yaxis_range=[0, 105], showlegend=False)
+                st.plotly_chart(chart, width="stretch")
+                st.caption(reference["denominator_definition"] + " " +
+                           "Missing screening documentation does not prove screening was not done. "
+                           "Synthetic group differences are descriptive only.")
+            else:
+                st.dataframe(frame, hide_index=True, width="stretch")
+                numeric = [column for column in frame if pd.api.types.is_numeric_dtype(frame[column])]
+                labels = [column for column in frame if column not in numeric]
+                if len(labels) == 1 and len(numeric) == 1 and 1 < len(frame) <= 30:
+                    chart_frame = frame.copy()
+                    chart_frame["_short_label"] = chart_frame[labels[0]].astype(str).map(
+                        lambda value: value if len(value) <= 48 else value[:45] + "..."
+                    )
+                    chart = px.bar(
+                        chart_frame, x=numeric[0], y="_short_label",
+                        orientation="h", text=numeric[0],
+                        custom_data=[labels[0]],
+                        labels={"_short_label": "",
+                                numeric[0]: "Number of records" if numeric[0] in {
+                                    "value", "procedure_record_count", "screening_procedure_records"
+                                } else numeric[0].replace("_", " ").title()},
+                    )
+                    chart.update_traces(
+                        marker_color="#168B85", textposition="outside",
+                        hovertemplate="%{customdata[0]}<br>Count: %{x}<extra></extra>",
+                    )
+                    chart.update_layout(
+                        showlegend=False, yaxis_autorange="reversed",
+                        height=max(400, 48 * len(frame)),
+                        margin=dict(l=20, r=60, t=20, b=30),
+                    )
+                    chart.update_yaxes(type="category")
+                    st.plotly_chart(chart, width="stretch")
+        if not validated:
+            st.caption(
+                "Calculated from synthetic records. Query restrictions and result-shape "
+                "checks passed. Numerical cross-checks, when shown, verify the counts "
+                "for the selected parameters; the interpretation of the user's question "
+                "was not independently audited."
+            )
+        with st.expander("Analysis trace: tool, query, and checks"):
+            st.write("**Source tables:**", ", ".join(query["source_tables"]))
+            if result["tool"] in {"run_aggregate_sql", "run_verified_screening"}:
+                st.code(query["sql"], language="sql")
+            else:
+                st.json(query["operation"])
+            st.write("**Checks performed:**")
+            if result.get("cross_check"):
+                st.write("**Cross-tool check:**", result["cross_check"])
+            for check in result["checks"]:
+                st.write("- " + check.replace(
+                    "Question-to-SQL meaning", "Question-to-analysis meaning"
+                ))
+            for attempt in result["attempts"]:
+                st.write(f'Attempt {attempt["number"]}: {attempt["status"]}')
+                if attempt.get("error"):
+                    st.write("Reason:", attempt["error"])
+    else:
+        st.info(result["message"])
+        if result["attempts"]:
+            with st.expander("Attempt details"):
+                for attempt in result["attempts"]:
+                    st.write(f'Attempt {attempt["number"]}: {attempt["status"]}')
+                    if attempt.get("error"):
+                        st.write("Reason:", attempt["error"])

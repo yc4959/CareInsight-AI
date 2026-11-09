@@ -1,0 +1,47 @@
+{
+  "run_at_utc": "2026-11-09T04:16:03.886031+00:00",
+  "total": 4,
+  "passed": 0,
+  "cases": [
+    {
+      "id": "Q01",
+      "category": "new_aggregate",
+      "question": "Which procedure descriptions appeared most often in 2020? Show the top 10 by number of records.",
+      "expected_status": "exploratory",
+      "observed_status": "exception",
+      "error_type": "RuntimeError",
+      "passed": false,
+      "seconds": 0.0
+    },
+    {
+      "id": "Q02",
+      "category": "new_aggregate",
+      "question": "Which procedure codes had the most records in 2019? Show the top 5.",
+      "expected_status": "exploratory",
+      "observed_status": "exception",
+      "error_type": "RuntimeError",
+      "passed": false,
+      "seconds": 0.0
+    },
+    {
+      "id": "Q03",
+      "category": "join",
+      "question": "Which encounter types have the most substance use screening procedure records in 2020?",
+      "expected_status": "exploratory",
+      "observed_status": "exception",
+      "error_type": "RuntimeError",
+      "passed": false,
+      "seconds": 0.0
+    },
+    {
+      "id": "Q04",
+      "category": "condition_records",
+      "question": "Which disorder-labeled condition descriptions had the most distinct patients with a new record in 2019? Show the top 5.",
+      "expected_status": "exploratory",
+      "observed_status": "exception",
+      "error_type": "RuntimeError",
+      "passed": false,
+      "seconds": 0.0
+    }
+  ]
+}

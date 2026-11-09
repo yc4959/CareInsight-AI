@@ -14,6 +14,16 @@ from careinsight.help_intent import wants_product_help
 import copy
 TOOLS = copy.deepcopy(TOOLS)
 for tool in TOOLS:
+    if tool["function"]["name"] == "get_screening_summary":
+        tool["function"]["description"] = (
+            "Calculate 2020 synthetic adult screening record coverage "
+            "for depression or substance use; choose overall, age_group, or gender."
+        )
+        schema = tool["function"]["parameters"]
+        schema["properties"]["metric"] = {
+            "type": "string", "enum": ["depression", "substance_use", "both"]
+        }
+        schema["required"].append("metric")
     if tool["function"]["name"] == "ask_clarification":
         schema = tool["function"]["parameters"]
         schema["properties"]["options"] = {
@@ -23,52 +33,41 @@ for tool in TOOLS:
         schema["required"] = ["question", "options"]
 
 SYSTEM = """
-You help nontechnical users explore recorded depression screenings in
-synthetic patient data. Use short, plain English. Never require users
-to know database terms, denominator, prevalence, or coverage.
-The page's selected year is 2020. Use it if no year is mentioned and
-state it in the report. Never reinterpret an explicit different year
-or a relative year as 2020. Ask which calendar year for relative dates.
-Only one measure is supported: adult depression screening records.
-Available breakdowns: everyone, age groups, and the recorded GENDER field.
-No custom filters, diagnoses, symptom severity, or causal analysis.
+You help nontechnical users explore screening procedure records in
+synthetic patient data. Always use short, plain English. The available
+metrics are 2020 adult depression screening record coverage and 2020
+adult substance use screening record coverage. The latter uses one code
+whose source description is "Screening for drug abuse (procedure)".
+These are records of getting checked, not diagnoses or proof that a
+screening was actually performed. Both metrics share the same eligible
+adult population. Available breakdowns: everyone, age groups, and the
+original GENDER field. No custom filters or other years.
 
-If a question explicitly asks who has depression, explain that this
-version cannot answer that. Do not substitute screening analysis.
-If 'depression' or 'getting checked' is ambiguous, ask what they mean.
-Use ask_clarification with ONE short question and 2-3 distinct plain
-English answer options. Options may include unsupported requests;
-explain limitations if the user chooses one. Do not steer every answer
-into screening. Free-text answers must also be respected.
-Only ask for missing information, never reconfirm an explicit screening
-request. Interpret 'younger and older people' as age groups. If they ask
-'who' without specifying a comparison, offer age groups or men and women.
-For simple counts or rates without a breakdown, use overall.
-Call get_screening_summary only when the intended measure is clear.
-Use prior answers to resolve ambiguity. Do not repeatedly ask the same
-question. Never silently drop a requested age filter or change a measure.
+If the user names depression screening, use metric depression. If the
+user names substance use or drug abuse screening, use substance_use.
+If they ask only for "screening" without saying which kind, ask one
+plain-language clarification with 2-3 options. If they say only
+"depression" or only "substance use" without saying whether they mean
+screening or diagnosis, ask which they mean. A request for diagnoses,
+prevalence, severity, causes, treatment, or another measure is outside
+scope. Explain that without running a screening analysis. If they ask
+for both metrics in one question, use metric both to show two separate analyses. Do not ask which metric to run first.
+Do not silently change a user's measure. Do not repeat a clarification
+already answered. Free-text clarification answers must be respected.
 
-Reports: plain English, concise takeaway, counts and percentages to two
- decimals. Say 'people included' and 'people with a screening record'.
-Explain the year and eligibility. Label F and M using their original
-values and explain that these come from the dataset's GENDER field.
-Use comparison.gap_percentage_points for gaps. Do not calculate new
-statistics. Zero missing_group_count only means no missing values among
-eligible people, not all possible categories being represented.
-Missing screening records do not prove screening was not performed.
-Do not infer actual coverage, causes, significance, or intervention effects.
-Clearly label synthetic data. Do not show internal variable names.
-Do not label gaps small, large, important, or meaningful: no such
-threshold has been defined. State the numerical difference only.
-Explain eligibility precisely: age 18+ on January 1, 2020; at least one
-healthcare visit in 2020; no recorded death date or a death date after
-December 31, 2020. Missing death dates mean no recorded death, not
-verified survival. Describe this as the dataset inclusion rule.
-Do not end with a question or offer a conversational follow-up:
-the interface provides its own next-analysis instructions.
-For clarification choices, say 'recorded depression diagnosis', not
-'actually has depression'. A diagnosis record does not establish the
-true prevalence of depression.
+Use 2020 if no year is mentioned; state the year in the result. Never
+reinterpret another explicit year or a relative year as 2020. Ask for
+the calendar year if a relative date is used. Interpret "younger and
+older people" as age groups. If no breakdown is requested, use overall.
+For a supported request, call get_screening_summary once with year,
+group_by, and metric (depression, substance_use, or both). Use
+ask_clarification for ambiguity, with one
+short question and 2-3 distinct plain-English options.
+
+Never invent numbers. The reporting code handles counts and prose from
+validated tool evidence. Synthetic data cannot establish real-world
+patterns, causes, significance, or intervention effects. Missing records
+do not prove that screening did not happen. Preserve original F/M labels.
 """
 
 
@@ -91,19 +90,19 @@ def needs_metric_clarification(question):
 
 # CAPABILITIES_HELP_V1
 CAPABILITIES_HELP = """
-I help you explore recorded depression screenings in a synthetic patient dataset.
+I help you explore recorded adult depression and substance use screenings
+in a synthetic patient dataset.
 
-You can ask me to:
-- Count people with or without a screening record.
-- Compare screening records across age groups or the dataset's F/M categories.
-- Show the percentage with a screening record and explain who was included.
+You can ask how many people have a screening record, what percentage
+that represents, or how the percentages compare by age group or the
+dataset's F/M categories.
 
-Try: **Compare screening records between younger and older adults.**
+Try: **Compare substance use screening records across age groups.**
 
-I use **2020 data**. If your question is unclear, I will ask one simple
-question before analyzing it. I cannot tell who has depression, explain
-what caused a difference, recommend treatment, or analyze other years.
-The data are synthetic, not real patient findings.
+I use **2020 data**. If it is unclear which screening you mean, I will
+ask a short question first. I cannot determine who has a diagnosis,
+explain causes, recommend treatment, or analyze other years. These are
+synthetic data, not real patient findings.
 
 Select **Start a new analysis** to ask a data question.
 """
@@ -120,6 +119,61 @@ def is_capabilities_question(question):
     return normalized in english or re.sub(r"\s+", "", normalized) in chinese
 
 
+# TWO_METRICS_WEB_V1: offer plain-language choices for an unclear measure.
+def metric_options(question):
+    words = set(re.findall(r"[a-z]+", question.lower()))
+    if "depression" in words and not {"substance", "drug"} & words:
+        return [
+            "Recorded depression screenings (getting checked)",
+            "Recorded depression diagnoses (not supported)",
+        ]
+    if {"substance", "drug"} & words and "depression" not in words:
+        return [
+            "Recorded substance use screenings (getting checked)",
+            "Recorded substance use diagnoses (not supported)",
+        ]
+    return [
+        "Recorded depression screenings",
+        "Recorded substance use screenings",
+        "Both screening types, separately",
+    ]
+
+
+# BOTH_METRICS_WEB_V1: respect an explicit request for both measures.
+def both_metrics_requested(state):
+    question = state["question"].lower()
+    has_depression = "depression" in question
+    has_substance = "substance" in question or "drug" in question
+    if any(term in question for term in (
+        "diagnos", "prevalence", "severity", "treatment", "cause"
+    )):
+        return False
+    if "screen" not in question:
+        return False
+    if has_depression and has_substance:
+        return True
+    if has_depression or has_substance:
+        return False
+    answers = [
+        item.get("answer", "").strip().lower()
+        for item in state.get("clarification_history", [])
+    ]
+    return any(answer in {
+        "both", "both, separately", "both separately",
+        "both screening types", "both screening types, separately",
+    } for answer in answers)
+
+
+def render_two_reports(results):
+    if len(results) != 2:
+        raise ValueError("Expected two metric results.")
+    return (
+        "**Two separate screening record measures** — each uses the same "
+        "eligible adult population.\n\n"
+        + "\n\n---\n\n".join(render_evidence_report(r) for r in results)
+    )
+
+
 def process_turn(state):
     if wants_product_help(state):
         state["help"] = CAPABILITIES_HELP
@@ -133,10 +187,7 @@ def process_turn(state):
         state["pending"] = {
             "id": None,
             "question": "What would you like to compare?",
-            "options": [
-                "Recorded depression screenings (getting checked)",
-                "Recorded depression diagnoses (not supported yet)",
-            ],
+            "options": metric_options(state["question"]),
         }
         state["clarifications"] += 1
         return
@@ -147,7 +198,8 @@ def process_turn(state):
     if not calls:
         state["notice"] = (
             "No data analysis was run. "
-            "This version can compare recorded depression screenings in 2020. "
+            "This version can compare recorded depression or substance use "
+            "screenings in 2020. "
             "Choose 'Start a new analysis' to ask another question."
         )
         state["pending"] = None
@@ -185,7 +237,7 @@ def process_turn(state):
 
     if name != "get_screening_summary":
         raise ValueError("Unsupported tool.")
-    if not isinstance(args, dict) or set(args) != {"year", "group_by"}:
+    if not isinstance(args, dict) or set(args) != {"year", "group_by", "metric"}:
         raise ValueError("Invalid arguments.")
     if type(args["year"]) is not int or args["year"] != 2020:
         raise ValueError("Unsupported year.")
@@ -193,8 +245,19 @@ def process_turn(state):
         raise ValueError("Invalid grouping.")
     if args["group_by"] not in {"overall", "age_group", "gender"}:
         raise ValueError("Unsupported grouping.")
+    if args["metric"] not in {"depression", "substance_use", "both"}:
+        raise ValueError("Unsupported metric.")
 
-    result = get_screening_summary(**args)
+    metrics = (
+        ("depression", "substance_use")
+        if args["metric"] == "both" or both_metrics_requested(state)
+        else (args["metric"],)
+    )
+    results = [
+        get_screening_summary(year=args["year"], group_by=args["group_by"], metric=metric)
+        for metric in metrics
+    ]
+    result = results[0] if len(results) == 1 else results
     state["evidence"] = {"tool": name, "arguments": args, "result": result}
     state["messages"].append(reply)
     state["messages"].append({
@@ -202,7 +265,10 @@ def process_turn(state):
         "tool_call_id": tool_call["id"],
         "content": json.dumps(result, ensure_ascii=False),
     })
-    state["report"] = render_evidence_report(result)
+    state["report"] = (
+        render_evidence_report(result) if len(results) == 1
+        else render_two_reports(results)
+    )
     state["pending"] = None
 
 
@@ -210,12 +276,13 @@ def render_chat():
     st.divider()
     st.header("Ask CareInsight")
     st.caption(
-        "Explore who has a recorded depression screening in this synthetic dataset. "
+        "Explore recorded depression or substance use screenings in this "
+        "synthetic dataset. "
         "This version supports 2020 data only. "
         "The chart controls above do not filter this conversation."
     )
     st.markdown(
-        "**Try:** Which age group has fewer recorded depression screenings?"
+        "**Try:** Which age group has fewer recorded substance use screenings?"
     )
 
     with st.expander("What can I ask?"):
@@ -309,9 +376,13 @@ def render_chat():
                     "role": "user",
                     "content": clarification.strip(),
                 })
-                if clarification.strip() == "Recorded depression diagnoses (not supported yet)":
+                if clarification.strip() in {
+                    "Recorded depression diagnoses (not supported)",
+                    "Recorded substance use diagnoses (not supported)",
+                    "Diagnoses (not supported)",
+                }:
                     state["notice"] = (
-                        "This version cannot compare recorded depression diagnoses. "
+                        "This version cannot compare diagnoses. "
                         "No screening analysis was run."
                     )
                     state["pending"] = None

@@ -1,0 +1,36 @@
+[
+  {
+    "id": "M01",
+    "category": "missing_subject_then_answer",
+    "question": "2019 top five",
+    "answer": "The five procedure descriptions with the most recorded procedure rows in 2019.",
+    "clarification_contains": ["2019", "record", "patient", "?"],
+    "expected_status": "exploratory",
+    "value_kind": "records",
+    "expected_row_count": 5,
+    "expected_counts": {
+      "Assessment of health and social care needs (procedure)": 776,
+      "Depression screening (procedure)": 671,
+      "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": 599,
+      "Assessment of substance use (procedure)": 561,
+      "Medication Reconciliation (procedure)": 502
+    }
+  },
+  {
+    "id": "M02",
+    "category": "disease_definition_then_answer",
+    "question": "Which disease had the most patients in 2019?",
+    "answer": "Count distinct patients with a new condition record starting in 2019, only for descriptions ending in (disorder). Show the top five descriptions. Treat the labels as an exploratory proxy, not disease prevalence.",
+    "clarification_contains": ["condition", "disease-only"],
+    "expected_status": "exploratory",
+    "value_kind": "patients",
+    "expected_row_count": 5,
+    "expected_counts": {
+      "Viral sinusitis (disorder)": 95,
+      "Acute viral pharyngitis (disorder)": 56,
+      "Acute bronchitis (disorder)": 51,
+      "Streptococcal sore throat (disorder)": 13,
+      "Anemia (disorder)": 9
+    }
+  }
+]

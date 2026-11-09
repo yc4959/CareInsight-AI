@@ -3,22 +3,25 @@ from pathlib import Path
 
 import pandas as pd
 
+from careinsight.data_source import source_path
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def get_screening_summary(
-    year: int = 2020, group_by: str = "overall"
+    year: int = 2020, group_by: str = "overall", metric: str = "depression"
 ) -> dict:
     """Calculate synthetic screening coverage using an allowed grouping."""
+    if metric not in {"depression", "substance_use"}:
+        raise ValueError("Supported metrics: depression, substance_use.")
     if group_by not in {"overall", "age_group", "gender"}:
         raise ValueError("Supported groupings: overall, age_group, gender.")
     if type(year) is not int or year != 2020:
         raise ValueError("Only the validated year 2020 is supported.")
 
-    data = ROOT / "data" / "csv"
-    patients = pd.read_csv(data / "patients.csv", dtype="string")
-    encounters = pd.read_csv(data / "encounters.csv", dtype="string")
-    procedures = pd.read_csv(data / "procedures.csv", dtype="string")
+    patients = pd.read_csv(source_path("patients"), dtype="string")
+    encounters = pd.read_csv(source_path("encounters"), dtype="string")
+    procedures = pd.read_csv(source_path("procedures"), dtype="string")
 
     start = pd.Timestamp("2020-01-01", tz="UTC")
     end = pd.Timestamp("2021-01-01", tz="UTC")
@@ -38,10 +41,12 @@ def get_screening_summary(
     cohort = patients.loc[eligible].copy()
 
     procedure_dates = pd.to_datetime(procedures["START"], utc=True)
+    codes = {
+        "depression": ("171207006", "454711000124102", "715252007"),
+        "substance_use": ("713106006",),
+    }[metric]
     qualifying = (
-        procedures["CODE"].isin([
-            "171207006", "454711000124102", "715252007"
-        ])
+        procedures["CODE"].isin(codes)
         & (procedure_dates >= start)
         & (procedure_dates < end)
     )
@@ -106,7 +111,19 @@ def get_screening_summary(
     return {
         "comparison": comparison,
         "missing_group_count": missing_group_count,
-        "metric_id": "adult_depression_screening_record_coverage_v1",
+        "metric_id": {
+            "depression": "adult_depression_screening_record_coverage_v1",
+            "substance_use": "adult_substance_use_screening_record_coverage_v1",
+        }[metric],
+        "metric_name": {
+            "depression": "Adult depression screening record coverage",
+            "substance_use": "Adult substance use screening record coverage",
+        }[metric],
+        "procedure_codes": list(codes),
+        "definition_file": {
+            "depression": "docs/metric_definition.md",
+            "substance_use": "docs/substance_use_screening_metric.md",
+        }[metric],
         "year": year,
         "data_source": "Synthea synthetic patient data",
         "age_as_of": "2020-01-01",

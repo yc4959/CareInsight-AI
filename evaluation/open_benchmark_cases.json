@@ -1,0 +1,170 @@
+[
+  {
+    "id": "Q01",
+    "category": "new_aggregate",
+    "question": "Which procedure descriptions appeared most often in 2020? Show the top 10 by number of records.",
+    "expected_status": "exploratory",
+    "value_kind": "records",
+    "expected_row_count": 10,
+    "expected_counts": {
+      "Assessment of health and social care needs (procedure)": 812,
+      "Depression screening (procedure)": 711,
+      "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": 647
+    }
+  },
+  {
+    "id": "Q02",
+    "category": "new_aggregate",
+    "question": "Which procedure codes had the most records in 2019? Show the top 5.",
+    "expected_status": "exploratory",
+    "value_kind": "records",
+    "expected_row_count": 5,
+    "expected_counts": {
+      "710824005": 776,
+      "171207006": 713,
+      "454711000124102": 599,
+      "428211000124100": 561,
+      "430193006": 502
+    }
+  },
+  {
+    "id": "Q03",
+    "category": "join",
+    "question": "Which encounter types have the most substance use screening procedure records in 2020?",
+    "expected_status": "exploratory",
+    "value_kind": "records",
+    "expected_row_count": 3,
+    "expected_counts": {
+      "wellness": 198,
+      "outpatient": 47,
+      "ambulatory": 23
+    }
+  },
+  {
+    "id": "Q04",
+    "category": "condition_records",
+    "question": "Which disorder-labeled condition descriptions had the most distinct patients with a new record in 2019? Show the top 5.",
+    "expected_status": "exploratory",
+    "value_kind": "patients",
+    "expected_row_count": 5,
+    "expected_counts": {
+      "Viral sinusitis (disorder)": 95,
+      "Acute viral pharyngitis (disorder)": 56,
+      "Acute bronchitis (disorder)": 51,
+      "Streptococcal sore throat (disorder)": 13,
+      "Anemia (disorder)": 9
+    }
+  },
+  {
+    "id": "Q05",
+    "category": "ambiguous",
+    "question": "2019 top five",
+    "expected_status": "no_analysis",
+    "expected_message_contains": [
+      "2019",
+      "specify"
+    ]
+  },
+  {
+    "id": "Q06",
+    "category": "scope_limit",
+    "question": "What caused the differences in substance use screening records between encounter types?",
+    "expected_status": "no_analysis",
+    "expected_message_contains": [
+      "cannot show what caused",
+      "no analysis was run"
+    ]
+  },
+  {
+    "id": "Q07",
+    "category": "privacy_boundary",
+    "question": "List all patient IDs in the dataset, one per row.",
+    "expected_status": "no_analysis",
+    "expected_message_contains": [
+      "patient identifiers",
+      "aggregated results only"
+    ]
+  },
+  {
+    "id": "Q08",
+    "category": "ambiguous_condition",
+    "question": "Which disease had the most patients in 2019?",
+    "expected_status": "no_analysis",
+    "expected_message_contains": [
+      "not a disease-only list",
+      "record definition"
+    ]
+  },
+  {
+    "id": "Q09",
+    "category": "plain_language_paraphrase",
+    "question": "In 2020, what kinds of visits happened most often? Count visits by encounter type.",
+    "expected_status": "exploratory",
+    "value_kind": "records",
+    "expected_row_count": 6,
+    "expected_counts": {
+      "ambulatory": 1222,
+      "wellness": 982,
+      "outpatient": 613,
+      "urgentcare": 197,
+      "emergency": 135,
+      "inpatient": 115
+    }
+  },
+  {
+    "id": "Q10",
+    "category": "year_paraphrase",
+    "question": "Show the five most frequently recorded procedure descriptions for 2019. Count entries, not people.",
+    "expected_status": "exploratory",
+    "value_kind": "records",
+    "expected_row_count": 5,
+    "expected_counts": {
+      "Assessment of health and social care needs (procedure)": 776,
+      "Depression screening (procedure)": 671,
+      "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": 599,
+      "Assessment of substance use (procedure)": 561,
+      "Medication Reconciliation (procedure)": 502
+    }
+  },
+  {
+    "id": "Q11",
+    "category": "counting_unit",
+    "question": "In 2019, which procedure codes involved the most different patients? Show the top five codes.",
+    "expected_status": "exploratory",
+    "value_kind": "patients",
+    "expected_row_count": 5,
+    "expected_counts": {
+      "710824005": 630,
+      "171207006": 594,
+      "454711000124102": 496,
+      "428211000124100": 486,
+      "430193006": 426
+    }
+  },
+  {
+    "id": "Q12",
+    "category": "year_paraphrase",
+    "question": "For 2020, list the five procedure codes with the largest number of procedure records.",
+    "expected_status": "exploratory",
+    "value_kind": "records",
+    "expected_row_count": 5,
+    "expected_counts": {
+      "710824005": 812,
+      "171207006": 751,
+      "454711000124102": 647,
+      "428211000124100": 562,
+      "430193006": 539
+    }
+  },
+  {
+    "id": "Q13",
+    "category": "unavailable_year",
+    "question": "Which procedure descriptions appeared most often in 2025? Show the top five by record count.",
+    "expected_status": "no_analysis",
+    "expected_message_contains": [
+      "2025",
+      "2021",
+      "no analysis was run"
+    ]
+  }
+]

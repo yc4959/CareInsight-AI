@@ -1,0 +1,24 @@
+{
+  "run_at_utc": "2026-11-09T07:33:33.414328+00:00",
+  "total": 1,
+  "passed": 1,
+  "cases": [
+    {
+      "id": "Q13",
+      "category": "unavailable_year",
+      "question": "Which procedure descriptions appeared most often in 2025? Show the top five by record count.",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "The local synthetic data have no dated encounter, procedure, or condition records after 2021. Requested year(s): 2025. No analysis was run; please choose a year covered by this dataset.",
+      "message_checks": {
+        "2025": true,
+        "2021": true,
+        "no analysis was run": true
+      },
+      "no_tool_attempted": true,
+      "passed": true,
+      "seconds": 0.08
+    }
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "run_at_utc": "2026-11-09T04:39:13.237052+00:00",
+  "total": 4,
+  "passed": 4,
+  "cases": [
+    {
+      "id": "Q09",
+      "category": "plain_language_paraphrase",
+      "question": "In 2020, what kinds of visits happened most often? Count visits by encounter type.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Count encounters occurring in calendar year 2020 (UTC [2020-01-01, 2021-01-01)) grouped by ENCOUNTERCLASS, counting visit (encounter) rows, sorted descending. Year explicitly given as 2020.",
+          "parameters": {
+            "table": "encounters",
+            "year": 2020,
+            "group_by": "ENCOUNTERCLASS",
+            "aggregation": "row_count",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 20
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Count encounters occurring in calendar year 2020 (UTC [2020-01-01, 2021-01-01)) grouped by ENCOUNTERCLASS, counting visit (encounter) rows, sorted descending. Year explicitly given as 2020.",
+      "source_tables": [
+        "encounters"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "ambulatory",
+          "value": 1222
+        },
+        {
+          "group_name": "wellness",
+          "value": 982
+        },
+        {
+          "group_name": "outpatient",
+          "value": 613
+        },
+        {
+          "group_name": "urgentcare",
+          "value": 197
+        },
+        {
+          "group_name": "emergency",
+          "value": 135
+        },
+        {
+          "group_name": "inpatient",
+          "value": 115
+        }
+      ],
+      "query_or_parameters": {
+        "table": "encounters",
+        "year": 2020,
+        "group_by": "ENCOUNTERCLASS",
+        "aggregation": "row_count",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 20
+      },
+      "observed_counts": {
+        "ambulatory": 1222,
+        "wellness": 982,
+        "outpatient": 613,
+        "urgentcare": 197,
+        "emergency": 135,
+        "inpatient": 115
+      },
+      "count_checks": {
+        "ambulatory": true,
+        "wellness": true,
+        "outpatient": true,
+        "urgentcare": true,
+        "emergency": true,
+        "inpatient": true
+      },
+      "row_count_ok": true,
+      "passed": true,
+      "seconds": 1.96
+    },
+    {
+      "id": "Q10",
+      "category": "year_paraphrase",
+      "question": "Show the five most frequently recorded procedure descriptions for 2019. Count entries, not people.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Count raw procedure rows in 2019 (START in UTC [2019-01-01, 2020-01-01)), group by DESCRIPTION, top 5. This counts procedure records, not distinct patients.",
+          "parameters": {
+            "table": "procedures",
+            "year": 2019,
+            "group_by": "DESCRIPTION",
+            "aggregation": "row_count",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 5
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Count raw procedure rows in 2019 (START in UTC [2019-01-01, 2020-01-01)), group by DESCRIPTION, top 5. This counts procedure records, not distinct patients.",
+      "source_tables": [
+        "procedures"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "Assessment of health and social care needs (procedure)",
+          "value": 776
+        },
+        {
+          "group_name": "Depression screening (procedure)",
+          "value": 671
+        },
+        {
+          "group_name": "Depression screening using Patient Health Questionnaire Two-Item score (procedure)",
+          "value": 599
+        },
+        {
+          "group_name": "Assessment of substance use (procedure)",
+          "value": 561
+        },
+        {
+          "group_name": "Medication Reconciliation (procedure)",
+          "value": 502
+        }
+      ],
+      "query_or_parameters": {
+        "table": "procedures",
+        "year": 2019,
+        "group_by": "DESCRIPTION",
+        "aggregation": "row_count",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 5
+      },
+      "observed_counts": {
+        "Assessment of health and social care needs (procedure)": 776,
+        "Depression screening (procedure)": 671,
+        "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": 599,
+        "Assessment of substance use (procedure)": 561,
+        "Medication Reconciliation (procedure)": 502
+      },
+      "count_checks": {
+        "Assessment of health and social care needs (procedure)": true,
+        "Depression screening (procedure)": true,
+        "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": true,
+        "Assessment of substance use (procedure)": true,
+        "Medication Reconciliation (procedure)": true
+      },
+      "row_count_ok": true,
+      "passed": true,
+      "seconds": 2.08
+    },
+    {
+      "id": "Q11",
+      "category": "counting_unit",
+      "question": "In 2019, which procedure codes involved the most different patients? Show the top five codes.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Count distinct patients per procedure CODE among procedures with START in calendar year 2019 (UTC [2019-01-01, 2020-01-01)); group by CODE, sort descending, top 5. Counts are distinct patients per recorded procedure code, not proof of completed screening.",
+          "parameters": {
+            "table": "procedures",
+            "year": 2019,
+            "group_by": "CODE",
+            "aggregation": "unique_patients",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 5
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Count distinct patients per procedure CODE among procedures with START in calendar year 2019 (UTC [2019-01-01, 2020-01-01)); group by CODE, sort descending, top 5. Counts are distinct patients per recorded procedure code, not proof of completed screening.",
+      "source_tables": [
+        "procedures"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "710824005",
+          "value": 630
+        },
+        {
+          "group_name": "171207006",
+          "value": 594
+        },
+        {
+          "group_name": "454711000124102",
+          "value": 496
+        },
+        {
+          "group_name": "428211000124100",
+          "value": 486
+        },
+        {
+          "group_name": "430193006",
+          "value": 426
+        }
+      ],
+      "query_or_parameters": {
+        "table": "procedures",
+        "year": 2019,
+        "group_by": "CODE",
+        "aggregation": "unique_patients",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 5
+      },
+      "observed_counts": {
+        "710824005": 630,
+        "171207006": 594,
+        "454711000124102": 496,
+        "428211000124100": 486,
+        "430193006": 426
+      },
+      "count_checks": {
+        "710824005": true,
+        "171207006": true,
+        "454711000124102": true,
+        "428211000124100": true,
+        "430193006": true
+      },
+      "row_count_ok": true,
+      "passed": true,
+      "seconds": 2.21
+    },
+    {
+      "id": "Q12",
+      "category": "year_paraphrase",
+      "question": "For 2020, list the five procedure codes with the largest number of procedure records.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Count procedure records (raw rows) with START in calendar year 2020 (UTC [2020-01-01, 2021-01-01)), grouped by procedure CODE, sorted descending, top 5.",
+          "parameters": {
+            "table": "procedures",
+            "year": 2020,
+            "group_by": "CODE",
+            "aggregation": "row_count",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 5
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Count procedure records (raw rows) with START in calendar year 2020 (UTC [2020-01-01, 2021-01-01)), grouped by procedure CODE, sorted descending, top 5.",
+      "source_tables": [
+        "procedures"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "710824005",
+          "value": 812
+        },
+        {
+          "group_name": "171207006",
+          "value": 751
+        },
+        {
+          "group_name": "454711000124102",
+          "value": 647
+        },
+        {
+          "group_name": "428211000124100",
+          "value": 562
+        },
+        {
+          "group_name": "430193006",
+          "value": 539
+        }
+      ],
+      "query_or_parameters": {
+        "table": "procedures",
+        "year": 2020,
+        "group_by": "CODE",
+        "aggregation": "row_count",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 5
+      },
+      "observed_counts": {
+        "710824005": 812,
+        "171207006": 751,
+        "454711000124102": 647,
+        "428211000124100": 562,
+        "430193006": 539
+      },
+      "count_checks": {
+        "710824005": true,
+        "171207006": true,
+        "454711000124102": true,
+        "428211000124100": true,
+        "430193006": true
+      },
+      "row_count_ok": true,
+      "passed": true,
+      "seconds": 1.87
+    }
+  ]
+}

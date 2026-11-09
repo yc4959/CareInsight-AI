@@ -1,0 +1,24 @@
+{
+  "run_at_utc": "2026-11-09T07:27:57.771359+00:00",
+  "total": 1,
+  "passed": 0,
+  "cases": [
+    {
+      "id": "M01",
+      "question": "2019 top five",
+      "answer": "The five procedure descriptions with the most recorded procedure rows in 2019.",
+      "first_turn": {
+        "status": "no_analysis",
+        "message": "I need a bit more detail: \"2019 top five\" by what? For example, do you want the top five most frequent procedure descriptions in 2019, the top five encounter classes, or something else — and should it count record rows or distinct patients?\n\nNote: I can't list individual patients or encounters, only aggregated group labels and counts.",
+        "message_checks": {
+          "2019": true
+        },
+        "clarification_any_passed": false,
+        "no_tool_attempted": true,
+        "passed": false
+      },
+      "passed": false,
+      "seconds": 1.68
+    }
+  ]
+}

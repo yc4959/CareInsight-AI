@@ -1,0 +1,101 @@
+{
+  "run_at_utc": "2026-11-09T07:29:06.239806+00:00",
+  "total": 1,
+  "passed": 1,
+  "cases": [
+    {
+      "id": "M01",
+      "question": "2019 top five",
+      "answer": "The five procedure descriptions with the most recorded procedure rows in 2019.",
+      "first_turn": {
+        "status": "no_analysis",
+        "message": "I need a bit more detail: \"2019 top five\" by what? For example, do you want the top five most frequent procedure descriptions in 2019, the top five encounter classes, or something else — and should it count record rows or distinct patients?\n\nNote: I can't list individual patients or encounters, only aggregated group labels and counts.",
+        "message_checks": {
+          "2019": true,
+          "record": true,
+          "patient": true,
+          "?": true
+        },
+        "clarification_any_passed": true,
+        "no_tool_attempted": true,
+        "passed": true
+      },
+      "followup": {
+        "observed_status": "exploratory",
+        "attempts": [
+          {
+            "number": 1,
+            "status": "executed",
+            "tool": "run_pandas_aggregate",
+            "plan": "Count procedure rows by DESCRIPTION with START in calendar year 2019 (UTC [2019-01-01, 2020-01-01)), rank by row count descending, return top 5 procedure descriptions. Counting raw procedure rows (not distinct patients) as requested.",
+            "parameters": {
+              "table": "procedures",
+              "year": 2019,
+              "group_by": "DESCRIPTION",
+              "aggregation": "row_count",
+              "filter_column": "none",
+              "filter_value": "",
+              "limit": 5
+            }
+          }
+        ],
+        "message": "",
+        "tool": "run_pandas_aggregate",
+        "plan": "Count procedure rows by DESCRIPTION with START in calendar year 2019 (UTC [2019-01-01, 2020-01-01)), rank by row count descending, return top 5 procedure descriptions. Counting raw procedure rows (not distinct patients) as requested.",
+        "rows": [
+          {
+            "group_name": "Assessment of health and social care needs (procedure)",
+            "value": 776
+          },
+          {
+            "group_name": "Depression screening (procedure)",
+            "value": 671
+          },
+          {
+            "group_name": "Depression screening using Patient Health Questionnaire Two-Item score (procedure)",
+            "value": 599
+          },
+          {
+            "group_name": "Assessment of substance use (procedure)",
+            "value": 561
+          },
+          {
+            "group_name": "Medication Reconciliation (procedure)",
+            "value": 502
+          }
+        ],
+        "source_tables": [
+          "procedures"
+        ],
+        "query_or_parameters": {
+          "table": "procedures",
+          "year": 2019,
+          "group_by": "DESCRIPTION",
+          "aggregation": "row_count",
+          "filter_column": "none",
+          "filter_value": "",
+          "limit": 5
+        },
+        "observed_counts": {
+          "Assessment of health and social care needs (procedure)": 776,
+          "Depression screening (procedure)": 671,
+          "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": 599,
+          "Assessment of substance use (procedure)": 561,
+          "Medication Reconciliation (procedure)": 502
+        },
+        "count_checks": {
+          "Assessment of health and social care needs (procedure)": true,
+          "Depression screening (procedure)": true,
+          "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": true,
+          "Assessment of substance use (procedure)": true,
+          "Medication Reconciliation (procedure)": true
+        },
+        "row_count_ok": true,
+        "passed": true
+      },
+      "passed": true,
+      "seconds": 2.05,
+      "first_turn_reused_from": "evaluation/open_multiturn_20261109T072757Z.json"
+    }
+  ]
+}

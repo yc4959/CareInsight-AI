@@ -1,0 +1,103 @@
+{
+  "run_at_utc": "2026-11-09T07:26:55.503825+00:00",
+  "total": 2,
+  "passed": 1,
+  "cases": [
+    {
+      "id": "M01",
+      "question": "2019 top five",
+      "answer": "The five procedure descriptions with the most recorded procedure rows in 2019.",
+      "first_turn": {
+        "status": "no_analysis",
+        "message": "I need one clarification before running anything: \"2019 top five\" — top five of what?\n\nSome supported options for 2019, for example:\n- Top 5 procedure descriptions by number of procedure records\n- Top 5 procedure descriptions by number of distinct patients\n- Top 5 condition descriptions by number of records with a START date in 2019 (new condition records that year — not disease prevalence)\n- Top 5 encounter classes by number of encounters\n\nWhich subject and counting unit (records vs. distinct patients) do you want?",
+        "message_checks": {
+          "2019": true,
+          "specify": false
+        },
+        "no_tool_attempted": true,
+        "passed": false
+      },
+      "passed": false,
+      "seconds": 1.96
+    },
+    {
+      "id": "M02",
+      "question": "Which disease had the most patients in 2019?",
+      "answer": "Count distinct patients with a new condition record starting in 2019, only for descriptions ending in (disorder). Show the top five descriptions. Treat the labels as an exploratory proxy, not disease prevalence.",
+      "first_turn": {
+        "status": "no_analysis",
+        "message": "The conditions table includes findings and social factors, so it is not a disease-only list. Do you mean distinct patients with a new condition record starting in the year, or with a record active during the year? Please choose a record definition before analysis.",
+        "message_checks": {
+          "condition": true,
+          "disease-only": true
+        },
+        "no_tool_attempted": true,
+        "passed": true
+      },
+      "followup": {
+        "observed_status": "exploratory",
+        "attempts": [
+          {
+            "number": 1,
+            "status": "failed",
+            "error": "ValueError: Expected exactly one analysis tool call."
+          },
+          {
+            "number": 2,
+            "status": "executed",
+            "tool": "run_aggregate_sql",
+            "plan": "Calendar year 2019 = UTC [2019-01-01, 2020-01-01); new condition record defined by conditions.START in that window. Restrict DESCRIPTION to suffix '(disorder)'. Count DISTINCT patients per description; return top 5 by patient count. Exploratory proxy only — not disease prevalence.",
+            "sql": "SELECT DESCRIPTION AS condition_description, COUNT(DISTINCT PATIENT) AS distinct_patients FROM conditions WHERE CAST(START AS TIMESTAMPTZ) >= CAST('2019-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(START AS TIMESTAMPTZ) < CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND LOWER(DESCRIPTION) LIKE '%(disorder)' GROUP BY DESCRIPTION ORDER BY distinct_patients DESC, condition_description LIMIT 5"
+          }
+        ],
+        "message": "",
+        "tool": "run_aggregate_sql",
+        "plan": "Calendar year 2019 = UTC [2019-01-01, 2020-01-01); new condition record defined by conditions.START in that window. Restrict DESCRIPTION to suffix '(disorder)'. Count DISTINCT patients per description; return top 5 by patient count. Exploratory proxy only — not disease prevalence.",
+        "rows": [
+          {
+            "condition_description": "Viral sinusitis (disorder)",
+            "distinct_patients": 95
+          },
+          {
+            "condition_description": "Acute viral pharyngitis (disorder)",
+            "distinct_patients": 56
+          },
+          {
+            "condition_description": "Acute bronchitis (disorder)",
+            "distinct_patients": 51
+          },
+          {
+            "condition_description": "Streptococcal sore throat (disorder)",
+            "distinct_patients": 13
+          },
+          {
+            "condition_description": "Anemia (disorder)",
+            "distinct_patients": 9
+          }
+        ],
+        "source_tables": [
+          "conditions"
+        ],
+        "query_or_parameters": "SELECT DESCRIPTION AS condition_description, COUNT(DISTINCT PATIENT) AS distinct_patients FROM conditions WHERE CAST(START AS TIMESTAMPTZ) >= CAST('2019-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(START AS TIMESTAMPTZ) < CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND LOWER(DESCRIPTION) LIKE '%(disorder)' GROUP BY DESCRIPTION ORDER BY distinct_patients DESC, condition_description LIMIT 5",
+        "observed_counts": {
+          "Viral sinusitis (disorder)": 95,
+          "Acute viral pharyngitis (disorder)": 56,
+          "Acute bronchitis (disorder)": 51,
+          "Streptococcal sore throat (disorder)": 13,
+          "Anemia (disorder)": 9
+        },
+        "count_checks": {
+          "Viral sinusitis (disorder)": true,
+          "Acute viral pharyngitis (disorder)": true,
+          "Acute bronchitis (disorder)": true,
+          "Streptococcal sore throat (disorder)": true,
+          "Anemia (disorder)": true
+        },
+        "row_count_ok": true,
+        "passed": true
+      },
+      "passed": true,
+      "seconds": 5.5
+    }
+  ]
+}

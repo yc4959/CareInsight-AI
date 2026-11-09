@@ -1,0 +1,29 @@
+{
+  "run_at_utc": "2026-11-09T04:31:41.830130+00:00",
+  "total": 2,
+  "passed": 2,
+  "cases": [
+    {
+      "id": "Q06",
+      "category": "scope_limit",
+      "question": "What caused the differences in substance use screening records between encounter types?",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "These synthetic records can describe differences but cannot show what caused them. If you want a descriptive comparison, ask for record counts or percentages instead. No analysis was run.",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "id": "Q08",
+      "category": "ambiguous_condition",
+      "question": "Which disease had the most patients in 2019?",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "The conditions table includes findings and social factors, so it is not a disease-only list. Do you mean distinct patients with a new condition record starting in the year, or with a record active during the year? Please choose a record definition before analysis.",
+      "passed": true,
+      "seconds": 0.0
+    }
+  ]
+}

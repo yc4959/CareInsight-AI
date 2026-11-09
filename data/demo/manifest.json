@@ -1,0 +1,54 @@
+{
+  "source": "Synthea 1K sample CSV, Previous Versions (2019–2021)",
+  "source_url": "https://synthetichealth.github.io/downloads.html",
+  "transformation": "Selected approved columns only; row values and row order preserved; gzip compressed.",
+  "tables": {
+    "patients": {
+      "rows": 1163,
+      "columns": [
+        "Id",
+        "BIRTHDATE",
+        "DEATHDATE",
+        "GENDER"
+      ],
+      "source_sha256": "4ae360777a63cdd311559ab74f6b6656c56f37015e3e051c9059ede55d346e28",
+      "demo_sha256": "e5a885210281a85c5e9d14d08181587ce801446c53ac416507c6816ae6308cb9"
+    },
+    "encounters": {
+      "rows": 61459,
+      "columns": [
+        "Id",
+        "START",
+        "PATIENT",
+        "ENCOUNTERCLASS"
+      ],
+      "source_sha256": "5fca6af9bc9a9199b22e73f2467e0278a068aada09a355cee6e09f9844e5060c",
+      "demo_sha256": "fe03b0e5efca0f794aa3fdfe4d70d2b589240cff5b2f16c48383fde8435d4d55"
+    },
+    "procedures": {
+      "rows": 83823,
+      "columns": [
+        "START",
+        "PATIENT",
+        "ENCOUNTER",
+        "CODE",
+        "DESCRIPTION"
+      ],
+      "source_sha256": "0a2f3b6d6751c346f18d76998e7af6622acb9709b471108f0953ce92d928d210",
+      "demo_sha256": "be07348ef0724e75af0974d4cd54ddf50b30c3d4f3ebdd579c781cf0c323769d"
+    },
+    "conditions": {
+      "rows": 38094,
+      "columns": [
+        "START",
+        "STOP",
+        "PATIENT",
+        "ENCOUNTER",
+        "CODE",
+        "DESCRIPTION"
+      ],
+      "source_sha256": "346028c5ab49b0052677a5adb3a0bcab7d7c36416378f721f2214eee37af56ed",
+      "demo_sha256": "48f36af5175a1512425e1be2b3b1a62d838edab4b925ad3194d76bd4db74bcdd"
+    }
+  }
+}
