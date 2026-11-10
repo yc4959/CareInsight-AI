@@ -86,7 +86,10 @@ def make_chart(frame: pd.DataFrame, kind: str, value: str | None = None):
     x_col, y_col = categories[:2]
     if frame.duplicated([x_col, y_col]).any():
         raise ValueError("A heatmap needs one value per pair of groups.")
-    matrix = frame.pivot(index=y_col, columns=x_col, values=value)
+    chart_frame = frame.copy()
+    chart_frame[x_col] = chart_frame[x_col].astype(str)
+    chart_frame[y_col] = chart_frame[y_col].astype(str)
+    matrix = chart_frame.pivot(index=y_col, columns=x_col, values=value)
     fig = px.imshow(matrix, aspect="auto", text_auto=True,
                     color_continuous_scale="Teal", labels={"color": value.replace("_", " ").title()})
     fig.update_layout(xaxis_title=x_col.replace("_", " ").title(),
