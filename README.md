@@ -1,12 +1,20 @@
 # CareInsight AI
 
-**A natural-language analytics prototype for synthetic healthcare records.** Ask a plain-English data question; the model selects a reviewed screening measure, restricted SQL, or parameterized Pandas. One app displays the calculated table, chart when suitable, plan, evidence level, and analysis trace. Aggregate results with suitable columns can be viewed as a bar chart, time-series line chart, or two-dimensional heatmap. Chart values always come from the executed analysis; the model does not generate chart pixels or executable plotting code.
+**A natural-language analytics agent for synthetic healthcare records.** [Try the live app](https://careinsight-ai-cdcqgk3wyjhuapear6parn.streamlit.app/) · [Explore the code](https://github.com/yc4959/CareInsight-AI)
 
-This is a portfolio prototype using **Synthea synthetic data**, not real patient records. Its exploratory answers are not clinical findings or validated population estimates.
+## 30-second overview
 
-**[Try the live app](https://careinsight-ai-cdcqgk3wyjhuapear6parn.streamlit.app/)** · [Source code](https://github.com/yc4959/CareInsight-AI)
+- **Ask a data question:** The model chooses a reviewed screening measure, restricted SQL, or parameterized Pandas, then the app shows a table, chart, and analysis trace.
+- **Check the evidence:** Reviewed screening counts must match an independent reference before publication. Exploratory results show their narrower validation level.
+- **See the observed evaluation:** A saved 30-question run scored **27/30 initially, 29/30 after correcting two scoring rules**. The latest clarification change has **not yet had a fresh live 30-question run**; see [evaluation details](evaluation/report.md).
+- **Know the scope:** The data are synthetic Synthea records. This is a demonstration of auditable data analysis, not a clinical finding or population estimate.
 
-**Current scope:** All rows from four source tables are packaged with approved columns. Independently checked single-year screening-record coverage is available for 2018, 2019, and 2020; the reviewed cross-year comparison covers 2019–2020. Other supported aggregate questions are labeled exploratory. **Full product vision and free-hosting limits:** see [Scope and roadmap](docs/scope_and_roadmap.md). The local 18-file download is about 539 MB; it is not all hosted or queryable in this version. The main app supports a follow-up question after a completed analysis; each follow-up runs a fresh tool call.
+![Verified 2020 screening analysis showing the selected tool, independent count check, table, and chart](docs/images/verified-screening-2020.png)
+
+*Screenshot from a real app run: 2020 substance use screening records by the dataset's original GENDER categories.*
+
+**Current scope:** Four approved synthetic source tables are packaged for the demo. Independently checked single-year screening-record coverage is available for 2018, 2019, and 2020; the reviewed cross-year comparison covers 2019–2020. Other supported aggregate questions are labeled exploratory. The app supports follow-up questions and displays the selected path and validation checks. [Full product vision and free-hosting limits](docs/scope_and_roadmap.md) explains why the complete 18-file, approximately 539 MB local download is not hosted here.
+
 The [2000–2021 annual data audit](docs/annual_data_audit.md) shows event counts, months with records, and screening-code rows by year. It identifies the incomplete 2021 window and a large change in procedure volume around 2011–2012; neither observation is a validated clinical trend. Regenerate it with `CAREINSIGHT_USE_DEMO_DATA=1 python -m scripts.audit_years`.
 
 ## At a glance
@@ -94,7 +102,7 @@ Do not commit a populated `secrets.toml` file. The app reads these values from e
 
 ## Evaluation
 
-[`evaluation/report.md`](evaluation/report.md) records the observed runs, failures, and corrections. In a live **30-question fixed evaluation**, the original score was **27/30**; after correcting two overly literal response-phrase checks using the saved outputs, the score was **29/30**: 7/7 verified-measure, 12/12 exploratory, and 10/11 no-analysis cases. In the remaining case, the model proposed a tool for an ambiguous question; a request check rejected it before a query ran. A subsequent local change now clarifies such wording before tool selection; it has **not yet been re-evaluated in a live 30-question run**. These fixed-case results are **not a general accuracy or routing estimate**. The original run, corrected rescore, and earlier failures remain in the report. The latest full offline test run passed **65 tests**, including 18 independent annual SQL–Pandas comparisons; live model routing is checked separately.
+[`evaluation/report.md`](evaluation/report.md) records the observed runs, failures, and corrections. In a live **30-question fixed evaluation**, the original score was **27/30**; after correcting two overly literal response-phrase checks using the saved outputs, the score was **29/30**: 7/7 verified-measure, 12/12 exploratory, and 10/11 no-analysis cases. In the remaining case, the model proposed a tool for an ambiguous question; a request check rejected it before a query ran. A subsequent local change now clarifies such wording before tool selection; it has **not yet been re-evaluated in a live 30-question run**. These fixed-case results are **not a general accuracy or routing estimate**. The original run, corrected rescore, and earlier failures remain in the report. The latest full offline test run passed **68 tests**, including 18 independent annual SQL–Pandas comparisons; live model routing is checked separately.
 
 Run local checks with:
 
