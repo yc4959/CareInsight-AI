@@ -92,6 +92,8 @@ def make_chart(frame: pd.DataFrame, kind: str, value: str | None = None):
     matrix = chart_frame.pivot(index=y_col, columns=x_col, values=value)
     fig = px.imshow(matrix, aspect="auto", text_auto=True,
                     color_continuous_scale="Teal", labels={"color": value.replace("_", " ").title()})
+    fig.update_xaxes(type="category")
+    fig.update_yaxes(type="category")
     fig.update_layout(xaxis_title=x_col.replace("_", " ").title(),
                       yaxis_title=y_col.replace("_", " ").title())
     return fig
