@@ -98,6 +98,10 @@ names. Prefer at most 20 groups. Do not access files or modify data.
 When clarifying an ambiguous request, keep any explicit year and ask only for
 the missing subject or counting unit. Offer only supported aggregate examples;
 never suggest listing or ranking individual patients.
+For a follow-up question, use the previous completed analysis in the conversation
+as context. Carry forward its subject, year, and counting unit unless the user
+changes one of them. State any carried-forward choices in the new plan. Do not
+reuse old numbers as the answer; run a new tool for each new analysis.
 The application will display the SQL or Pandas parameters and exact result.
 Only run_verified_screening and run_verified_screening_trend may receive an independent-metric-reference label,
 and only after the code check passes. Other analyses remain exploratory. Do
@@ -270,6 +274,36 @@ def _requested_years(question, history):
     return set()
 
 
+def _latest_requested_metric(question, history):
+    """Use the most recent user turn that names exactly one reviewed measure."""
+    utterances = [question] + [item["content"] for item in reversed(history)
+                               if item["role"] == "user"]
+    for text in utterances:
+        depression = bool(re.search(r"\bdepression\b", text, re.I))
+        substance = bool(re.search(r"\b(substance|drug)\b", text, re.I))
+        if depression and substance:
+            return None
+        if depression or substance:
+            return "depression" if depression else "substance_use"
+    return None
+
+
+def _latest_requested_group(question, history):
+    """A new grouping overrides the previous one without changing its measure."""
+    utterances = [question] + [item["content"] for item in reversed(history)
+                               if item["role"] == "user"]
+    for text in utterances:
+        age = bool(re.search(r"\b(age|ages|younger|older)\b", text, re.I))
+        gender = bool(re.search(r"\b(gender|sex|men|women|male|female)\b", text, re.I))
+        if age and gender:
+            return None
+        if age or gender:
+            return "age_group" if age else "gender"
+        if re.search(r"\b(overall|everyone|all adults|all eligible)\b", text, re.I):
+            return "overall"
+    return "overall"
+
+
 def _verified_request_matches(question, history, args):
     """Prevent a verified tool from silently changing the requested measure."""
     user_text = " ".join(
@@ -281,11 +315,7 @@ def _verified_request_matches(question, history, args):
         return False
     if re.search(r"\b(diagnos(?:is|es|ed)|prevalence|cause|treatment)\b", user_text):
         return False
-    depression = bool(re.search(r"\bdepression\b", user_text))
-    substance = bool(re.search(r"\b(substance|drug)\b", user_text))
-    if depression == substance:
-        return False
-    if args["metric"] != ("depression" if depression else "substance_use"):
+    if args["metric"] != _latest_requested_metric(question, history):
         return False
     if not re.search(r"\bscreen(?:ing|ings|ed)?\b", user_text):
         return False
@@ -293,12 +323,7 @@ def _verified_request_matches(question, history, args):
         r"\b(type|class|where)\b", user_text
     ):
         return False
-    age = bool(re.search(r"\b(age|ages|younger|older)\b", user_text))
-    gender = bool(re.search(r"\b(gender|sex|men|women|male|female)\b", user_text))
-    if age and gender:
-        return False
-    group = "age_group" if age else "gender" if gender else "overall"
-    return args["group_by"] == group
+    return args["group_by"] == _latest_requested_group(question, history)
 
 
 def _verified_trend_request_matches(question, history, args):

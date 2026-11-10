@@ -6,8 +6,7 @@ This is a portfolio prototype using **Synthea synthetic data**, not real patient
 
 **[Try the live app](https://careinsight-ai-cdcqgk3wyjhuapear6parn.streamlit.app/)** · [Source code](https://github.com/yc4959/CareInsight-AI)
 
-**Current scope:** All rows from four source tables are packaged with approved columns. Independently checked single-year screening-record coverage is available for 2018, 2019, and 2020; the reviewed cross-year comparison covers 2019–2020. Other supported aggregate questions are labeled exploratory. **Full product vision and free-hosting limits:** see [Scope and roadmap](docs/scope_and_roadmap.md). The local 18-file download is about 539 MB; it is not all hosted or queryable in this version.
-
+**Current scope:** All rows from four source tables are packaged with approved columns. Independently checked single-year screening-record coverage is available for 2018, 2019, and 2020; the reviewed cross-year comparison covers 2019–2020. Other supported aggregate questions are labeled exploratory. **Full product vision and free-hosting limits:** see [Scope and roadmap](docs/scope_and_roadmap.md). The local 18-file download is about 539 MB; it is not all hosted or queryable in this version. The main app supports a follow-up question after a completed analysis; each follow-up runs a fresh tool call.
 The [2000–2021 annual data audit](docs/annual_data_audit.md) shows event counts, months with records, and screening-code rows by year. It identifies the incomplete 2021 window and a large change in procedure volume around 2011–2012; neither observation is a validated clinical trend. Regenerate it with `CAREINSIGHT_USE_DEMO_DATA=1 python -m scripts.audit_years`.
 
 ## At a glance

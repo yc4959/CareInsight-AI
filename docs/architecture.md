@@ -1,6 +1,6 @@
 # CareInsight AI architecture
 
-CareInsight AI is a local natural-language analytics prototype for **synthetic** Synthea records. The current entry point is `app.py`. It accepts descriptive questions, may ask for clarification, and shows the selected tool, analysis plan, results, chart when suitable, and an execution trace. Interface and reports are in English.
+CareInsight AI is a local natural-language analytics prototype for **synthetic** Synthea records. The current entry point is `app.py`. It accepts descriptive questions, may ask for clarification or a follow-up to a completed analysis, and shows the selected tool, analysis plan, results, chart when suitable, and an execution trace. Interface and reports are in English.
 
 ```mermaid
 flowchart LR
@@ -31,6 +31,7 @@ flowchart LR
 | `careinsight/read_only_sql.py` | Restricts aggregate SQL to approved synthetic tables and columns. |
 | `careinsight/pandas_aggregate.py` | Runs a fixed single-table aggregation from model-selected parameters and checks its counts in DuckDB. |
 | `careinsight/data_source.py` | Uses original local CSVs when present, otherwise packaged `data/demo/*.csv.gz`. |
+| `careinsight/followup_context.py` | Passes the last completed analysis's reviewed measure or exploratory plan as bounded context for a fresh follow-up tool call. |
 
 The reviewed path supports two **custom demonstration measures**, adult depression and substance-use screening record coverage in 2019 and 2020. Each annual measure can be shown overall, by age group, or by the source `GENDER` field. A 2019–2020 comparison computes separate annual cohorts and checks each year. The metric definitions are in `docs/metric_definition.md`, `docs/substance_use_screening_metric.md`, and `docs/annual_comparison.md`. A reviewed result is published only if every group count matches the independent reference. The 2021 event files stop in November and are excluded from full-year comparisons.
 

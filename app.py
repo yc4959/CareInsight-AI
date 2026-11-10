@@ -7,6 +7,7 @@ import plotly.express as px
 import streamlit as st
 
 from careinsight.open_analysis import analyze
+from careinsight.followup_context import context_from_result
 from careinsight.charts import chart_options, is_time_column, make_chart
 
 EXAMPLE_QUESTIONS = (
@@ -25,6 +26,8 @@ def select_example(question: str) -> None:
     st.session_state.explore_result = None
     st.session_state.explore_error = None
     st.session_state.explore_history = []
+    st.session_state.explore_followup_context = []
+    st.session_state.explore_followup_mode = False
 
 
 st.set_page_config(page_title="CareInsight AI", page_icon="📊", layout="wide")
@@ -93,10 +96,13 @@ with st.expander("Example questions", expanded=True):
 
 with st.expander("Evaluation: what has been checked"):
     st.markdown(
-        "**13/13 fixed single-turn cases passed across three separate post-fix observed runs:** "
-        "8 executed questions matched expected counts and 5 ambiguous or unsupported requests "
-        "ended without analysis. Two clarification follow-ups also passed in separate completed "
-        "tests. These are small fixed-case results, not a general accuracy or routing estimate. "
+        "**30-question fixed evaluation:** 27/30 on the original live run and "
+        "29/30 after correcting two overly literal response-phrase checks using "
+        "the saved outputs. The remaining failure was an ambiguous question for "
+        "which the model proposed a tool before the request check rejected it. "
+        "That wording was subsequently fixed in local tests; the 30-question live "
+        "run has not yet been repeated. These results are not a general accuracy "
+        "or routing estimate. "
         "Earlier failures and evaluator corrections are documented in "
         "[the evaluation report](https://github.com/yc4959/CareInsight-AI/blob/main/evaluation/report.md)."
     )
@@ -109,6 +115,10 @@ if not all(os.getenv(key) for key in (
 
 if "explore_history" not in st.session_state:
     st.session_state.explore_history = []
+if "explore_followup_context" not in st.session_state:
+    st.session_state.explore_followup_context = []
+if "explore_followup_mode" not in st.session_state:
+    st.session_state.explore_followup_mode = False
 if "explore_question_input" not in st.session_state:
     st.session_state.explore_question_input = EXAMPLE_QUESTIONS[0]
 
@@ -116,21 +126,28 @@ if st.button("Start a new question"):
     st.session_state.explore_result = None
     st.session_state.explore_error = None
     st.session_state.explore_history = []
+    st.session_state.explore_followup_context = []
+    st.session_state.explore_followup_mode = False
     st.session_state.explore_question_input = EXAMPLE_QUESTIONS[0]
     st.rerun()
 
 previous = st.session_state.get("explore_result")
 pending = (previous is not None and previous["status"] == "no_analysis"
            and len(st.session_state.explore_history) < 4)
+followup_mode = st.session_state.explore_followup_mode and not pending
 if pending:
-    st.write("**Original question:**", (
-        st.session_state.explore_history[0]["content"]
-        if st.session_state.explore_history else previous["question"]
-    ))
+    st.write("**Original question:**", previous["question"])
     st.info(previous["message"])
     with st.form("explore_clarification"):
         question = st.text_input("Your answer")
         submitted = st.form_submit_button("Continue")
+elif followup_mode:
+    st.caption("Your next question will use the completed analysis below as context. "
+               "The agent will run a fresh analysis for any new result.")
+    with st.form("explore_followup"):
+        question = st.text_input("Follow-up question",
+                                 placeholder="Break that down by age group.")
+        submitted = st.form_submit_button("Analyze follow-up")
 else:
     with st.form("explore_question"):
         question = st.text_input(
@@ -141,7 +158,8 @@ else:
         submitted = st.form_submit_button("Analyze")
 
 if submitted:
-    history = st.session_state.explore_history.copy() if pending else []
+    history = (st.session_state.explore_history.copy() if pending else
+               st.session_state.explore_followup_context.copy() if followup_mode else [])
     if pending:
         history.extend([
             {"role": "user", "content": previous["question"]},
@@ -160,6 +178,10 @@ if submitted:
             with st.spinner("Choosing a tool, running the analysis, and checking the result..."):
                 st.session_state.explore_result = analyze(question.strip(), history=history)
             st.session_state.explore_history = history
+            new_result = st.session_state.explore_result
+            if new_result["status"] in {"validated", "exploratory"}:
+                st.session_state.explore_followup_context = context_from_result(new_result)
+            st.session_state.explore_followup_mode = False
         except (ValueError, RuntimeError) as exc:
             st.session_state.explore_error = str(exc)
         except Exception:
@@ -174,12 +196,15 @@ if st.session_state.get("explore_error"):
 result = st.session_state.get("explore_result")
 if result and not pending:
     st.subheader("Your request")
+    st.write(result["question"])
     if st.session_state.explore_history:
-        st.write(st.session_state.explore_history[0]["content"])
-        st.write("**Clarification answer:**", result["question"])
-    else:
-        st.write(result["question"])
+        with st.expander("Previous context used for this question"):
+            for item in st.session_state.explore_history:
+                st.write(f"**{item['role'].title()}:** {item['content']}")
     if result["status"] in {"exploratory", "validated"}:
+        if not followup_mode and st.button("Ask a follow-up about this result"):
+            st.session_state.explore_followup_mode = True
+            st.rerun()
         validated = result["status"] == "validated"
         tool_label = (
             "Verified annual screening SQL" if result["tool"] == "run_verified_screening_trend" else
