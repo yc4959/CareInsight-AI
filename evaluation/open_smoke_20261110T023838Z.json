@@ -1,0 +1,1541 @@
+{
+  "run_at_utc": "2026-11-10T02:38:38.791840+00:00",
+  "total": 30,
+  "passed": 30,
+  "cases": [
+    {
+      "id": "Q01",
+      "category": "new_aggregate",
+      "question": "Which procedure descriptions appeared most often in 2020? Show the top 10 by number of records.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Count raw procedure rows with START in 2020 (UTC [2020-01-01, 2021-01-01)), grouped by DESCRIPTION, sorted descending, top 10. Counting records (procedure rows), not distinct patients. Exploratory single-table aggregate.",
+          "parameters": {
+            "table": "procedures",
+            "year": 2020,
+            "group_by": "DESCRIPTION",
+            "aggregation": "row_count",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 10
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Count raw procedure rows with START in 2020 (UTC [2020-01-01, 2021-01-01)), grouped by DESCRIPTION, sorted descending, top 10. Counting records (procedure rows), not distinct patients. Exploratory single-table aggregate.",
+      "source_tables": [
+        "procedures"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "Assessment of health and social care needs (procedure)",
+          "value": 812
+        },
+        {
+          "group_name": "Depression screening (procedure)",
+          "value": 711
+        },
+        {
+          "group_name": "Depression screening using Patient Health Questionnaire Two-Item score (procedure)",
+          "value": 647
+        },
+        {
+          "group_name": "Assessment of substance use (procedure)",
+          "value": 562
+        },
+        {
+          "group_name": "Medication Reconciliation (procedure)",
+          "value": 539
+        },
+        {
+          "group_name": "Assessment of anxiety (procedure)",
+          "value": 454
+        },
+        {
+          "group_name": "Screening for drug abuse (procedure)",
+          "value": 268
+        },
+        {
+          "group_name": "Auscultation of the fetal heart",
+          "value": 246
+        },
+        {
+          "group_name": "Evaluation of uterine fundal height",
+          "value": 246
+        },
+        {
+          "group_name": "Assessment using Alcohol Use Disorders Identification Test - Consumption (procedure)",
+          "value": 235
+        }
+      ],
+      "query_or_parameters": {
+        "table": "procedures",
+        "year": 2020,
+        "group_by": "DESCRIPTION",
+        "aggregation": "row_count",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 10
+      },
+      "observed_counts": {
+        "Assessment of health and social care needs (procedure)": 812,
+        "Depression screening (procedure)": 711,
+        "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": 647,
+        "Assessment of substance use (procedure)": 562,
+        "Medication Reconciliation (procedure)": 539,
+        "Assessment of anxiety (procedure)": 454,
+        "Screening for drug abuse (procedure)": 268,
+        "Auscultation of the fetal heart": 246,
+        "Evaluation of uterine fundal height": 246,
+        "Assessment using Alcohol Use Disorders Identification Test - Consumption (procedure)": 235
+      },
+      "count_checks": {
+        "Assessment of health and social care needs (procedure)": true,
+        "Depression screening (procedure)": true,
+        "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": true,
+        "Assessment of substance use (procedure)": true,
+        "Medication Reconciliation (procedure)": true,
+        "Assessment of anxiety (procedure)": true,
+        "Screening for drug abuse (procedure)": true,
+        "Auscultation of the fetal heart": true,
+        "Evaluation of uterine fundal height": true,
+        "Assessment using Alcohol Use Disorders Identification Test - Consumption (procedure)": true
+      },
+      "row_count_ok": true,
+      "tool_ok": true,
+      "counts_complete": true,
+      "passed": true,
+      "seconds": 2.55
+    },
+    {
+      "id": "Q02",
+      "category": "new_aggregate",
+      "question": "Which procedure codes had the most records in 2019? Show the top 5.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Count raw procedure rows by CODE in calendar year 2019 (UTC 2019-01-01 to 2020-01-01), sorted by row count descending, limited to the top 5 codes. Raw procedure rows (not distinct patients) because the user asked for records.",
+          "parameters": {
+            "table": "procedures",
+            "year": 2019,
+            "group_by": "CODE",
+            "aggregation": "row_count",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 5
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Count raw procedure rows by CODE in calendar year 2019 (UTC 2019-01-01 to 2020-01-01), sorted by row count descending, limited to the top 5 codes. Raw procedure rows (not distinct patients) because the user asked for records.",
+      "source_tables": [
+        "procedures"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "710824005",
+          "value": 776
+        },
+        {
+          "group_name": "171207006",
+          "value": 713
+        },
+        {
+          "group_name": "454711000124102",
+          "value": 599
+        },
+        {
+          "group_name": "428211000124100",
+          "value": 561
+        },
+        {
+          "group_name": "430193006",
+          "value": 502
+        }
+      ],
+      "query_or_parameters": {
+        "table": "procedures",
+        "year": 2019,
+        "group_by": "CODE",
+        "aggregation": "row_count",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 5
+      },
+      "observed_counts": {
+        "710824005": 776,
+        "171207006": 713,
+        "454711000124102": 599,
+        "428211000124100": 561,
+        "430193006": 502
+      },
+      "count_checks": {
+        "710824005": true,
+        "171207006": true,
+        "454711000124102": true,
+        "428211000124100": true,
+        "430193006": true
+      },
+      "row_count_ok": true,
+      "tool_ok": true,
+      "counts_complete": true,
+      "passed": true,
+      "seconds": 2.29
+    },
+    {
+      "id": "Q03",
+      "category": "join",
+      "question": "Which encounter types have the most substance use screening procedure records in 2020?",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_aggregate_sql",
+          "plan": "Count 2020 substance-use screening procedure records (CODE 713106006, CAST(START) in UTC [2020-01-01, 2021-01-01)) grouped by the linked encounter type. Join procedures.ENCOUNTER = encounters.Id and verify procedures.PATIENT = encounters.PATIENT; exclude procedure rows with no linked encounter. Count raw procedure rows (records), not patients, and return the top groups by count. Exploratory: a procedure row is a record, not proof of screening completion.",
+          "sql": "SELECT e.ENCOUNTERCLASS AS encounter_type, COUNT(*) AS procedure_records, COUNT(DISTINCT p.PATIENT) AS patients FROM procedures AS p JOIN encounters AS e ON e.Id = p.ENCOUNTER AND e.PATIENT = p.PATIENT WHERE p.CODE = '713106006' AND CAST(p.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(p.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ) GROUP BY e.ENCOUNTERCLASS ORDER BY procedure_records DESC LIMIT 20"
+        }
+      ],
+      "tool": "run_aggregate_sql",
+      "plan": "Count 2020 substance-use screening procedure records (CODE 713106006, CAST(START) in UTC [2020-01-01, 2021-01-01)) grouped by the linked encounter type. Join procedures.ENCOUNTER = encounters.Id and verify procedures.PATIENT = encounters.PATIENT; exclude procedure rows with no linked encounter. Count raw procedure rows (records), not patients, and return the top groups by count. Exploratory: a procedure row is a record, not proof of screening completion.",
+      "source_tables": [
+        "encounters",
+        "procedures"
+      ],
+      "validation_level": "structural_only",
+      "rows": [
+        {
+          "encounter_type": "wellness",
+          "procedure_records": 198,
+          "patients": 198
+        },
+        {
+          "encounter_type": "outpatient",
+          "procedure_records": 47,
+          "patients": 25
+        },
+        {
+          "encounter_type": "ambulatory",
+          "procedure_records": 23,
+          "patients": 23
+        }
+      ],
+      "query_or_parameters": "SELECT e.ENCOUNTERCLASS AS encounter_type, COUNT(*) AS procedure_records, COUNT(DISTINCT p.PATIENT) AS patients FROM procedures AS p JOIN encounters AS e ON e.Id = p.ENCOUNTER AND e.PATIENT = p.PATIENT WHERE p.CODE = '713106006' AND CAST(p.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(p.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ) GROUP BY e.ENCOUNTERCLASS ORDER BY procedure_records DESC LIMIT 20",
+      "observed_counts": {
+        "wellness": 198,
+        "outpatient": 47,
+        "ambulatory": 23
+      },
+      "count_checks": {
+        "wellness": true,
+        "outpatient": true,
+        "ambulatory": true
+      },
+      "row_count_ok": true,
+      "tool_ok": true,
+      "counts_complete": true,
+      "passed": true,
+      "seconds": 2.66
+    },
+    {
+      "id": "Q04",
+      "category": "condition_records",
+      "question": "Which disorder-labeled condition descriptions had the most distinct patients with a new record in 2019? Show the top 5.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "failed",
+          "tool": "run_aggregate_sql",
+          "plan": "Exploratory count of distinct patients with a new condition record (conditions.START in UTC 2019) by DESCRIPTION, restricted to DESCRIPTION containing '(disorder)'; top 5 by distinct patients. Not a prevalence measure.",
+          "sql": "SELECT DESCRIPTION AS condition_description, COUNT(DISTINCT PATIENT) AS distinct_patients\nFROM conditions\nWHERE START >= '2019-01-01'::timestamptz AND START < '2020-01-01'::timestamptz\n  AND DESCRIPTION ILIKE '%(disorder)%'\nGROUP BY DESCRIPTION\nORDER BY distinct_patients DESC\nLIMIT 5",
+          "error": "BinderException: Binder Error: Cannot compare values of type VARCHAR and type TIMESTAMP WITH TIME ZONE - an explicit cast is required\n\nLINE 1: ...(DISTINCT PATIENT) AS distinct_patients FROM conditions WHERE START >= CAST('2019-01-01' AS TIMESTAMPTZ) AND START < CAST...\n                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+        },
+        {
+          "number": 2,
+          "status": "executed",
+          "tool": "run_aggregate_sql",
+          "plan": "Retry with explicit cast of conditions.START to TIMESTAMPTZ: distinct patients with a new '(disorder)'-labeled condition record starting in UTC 2019, top 5 descriptions. Exploratory; not prevalence.",
+          "sql": "SELECT DESCRIPTION AS condition_description, COUNT(DISTINCT PATIENT) AS distinct_patients FROM conditions WHERE CAST(START AS TIMESTAMPTZ) >= CAST('2019-01-01' AS TIMESTAMPTZ) AND CAST(START AS TIMESTAMPTZ) < CAST('2020-01-01' AS TIMESTAMPTZ) AND DESCRIPTION ILIKE '%(disorder)%' GROUP BY DESCRIPTION ORDER BY distinct_patients DESC LIMIT 5"
+        }
+      ],
+      "tool": "run_aggregate_sql",
+      "plan": "Retry with explicit cast of conditions.START to TIMESTAMPTZ: distinct patients with a new '(disorder)'-labeled condition record starting in UTC 2019, top 5 descriptions. Exploratory; not prevalence.",
+      "source_tables": [
+        "conditions"
+      ],
+      "validation_level": "structural_only",
+      "rows": [
+        {
+          "condition_description": "Viral sinusitis (disorder)",
+          "distinct_patients": 95
+        },
+        {
+          "condition_description": "Acute viral pharyngitis (disorder)",
+          "distinct_patients": 56
+        },
+        {
+          "condition_description": "Acute bronchitis (disorder)",
+          "distinct_patients": 51
+        },
+        {
+          "condition_description": "Streptococcal sore throat (disorder)",
+          "distinct_patients": 13
+        },
+        {
+          "condition_description": "Anemia (disorder)",
+          "distinct_patients": 9
+        }
+      ],
+      "query_or_parameters": "SELECT DESCRIPTION AS condition_description, COUNT(DISTINCT PATIENT) AS distinct_patients FROM conditions WHERE CAST(START AS TIMESTAMPTZ) >= CAST('2019-01-01' AS TIMESTAMPTZ) AND CAST(START AS TIMESTAMPTZ) < CAST('2020-01-01' AS TIMESTAMPTZ) AND DESCRIPTION ILIKE '%(disorder)%' GROUP BY DESCRIPTION ORDER BY distinct_patients DESC LIMIT 5",
+      "observed_counts": {
+        "Viral sinusitis (disorder)": 95,
+        "Acute viral pharyngitis (disorder)": 56,
+        "Acute bronchitis (disorder)": 51,
+        "Streptococcal sore throat (disorder)": 13,
+        "Anemia (disorder)": 9
+      },
+      "count_checks": {
+        "Viral sinusitis (disorder)": true,
+        "Acute viral pharyngitis (disorder)": true,
+        "Acute bronchitis (disorder)": true,
+        "Streptococcal sore throat (disorder)": true,
+        "Anemia (disorder)": true
+      },
+      "row_count_ok": true,
+      "tool_ok": true,
+      "counts_complete": true,
+      "passed": true,
+      "seconds": 3.84
+    },
+    {
+      "id": "Q05",
+      "category": "ambiguous",
+      "question": "2019 top five",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "I need one clarification before I can run this: **\"top five\" of what?**\n\nYour previous topic isn't available in this conversation, so I don't have a subject to carry forward. For 2019, I can run an exploratory aggregate such as:\n\n- Top five **encounter types** (grouped by ENCOUNTERCLASS) by number of encounters\n- Top five **procedure descriptions** by number of procedure records\n- Top five **procedure descriptions** by number of distinct patients\n- Top five **condition descriptions** by number of condition records (note: the conditions table mixes disorders, findings, and social factors, so this is not a disease-prevalence ranking)\n\nWhich one did you mean?",
+      "message_checks": {
+        "2019": true,
+        "top five": true
+      },
+      "no_tool_attempted": true,
+      "passed": true,
+      "seconds": 2.31
+    },
+    {
+      "id": "Q06",
+      "category": "scope_limit",
+      "question": "What caused the differences in substance use screening records between encounter types?",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "These synthetic records can describe differences but cannot show what caused them. If you want a descriptive comparison, ask for record counts or percentages instead. No analysis was run.",
+      "message_checks": {
+        "cannot show what caused": true,
+        "no analysis was run": true
+      },
+      "no_tool_attempted": true,
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "id": "Q07",
+      "category": "privacy_boundary",
+      "question": "List all patient IDs in the dataset, one per row.",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "I can't return row-level patient identifiers. Outputs are limited to aggregated group labels and counts (for example, patient counts by GENDER or by encounter class), so a per-patient ID listing isn't available.\n\nIf it helps, I can produce an aggregate instead — for instance:\n- Number of distinct patients in the dataset overall\n- Distinct patient counts by GENDER\n- Distinct patient counts by encounter class for a given year (default 2020 if no year is given)\n\nLet me know which aggregate you'd like.",
+      "message_checks": {
+        "patient identifiers": true,
+        "aggregat": true
+      },
+      "no_tool_attempted": true,
+      "passed": true,
+      "seconds": 1.63
+    },
+    {
+      "id": "Q08",
+      "category": "ambiguous_condition",
+      "question": "Which disease had the most patients in 2019?",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "The conditions table includes findings and social factors, so it is not a disease-only list. Do you mean distinct patients with a new condition record starting in the year, or with a record active during the year? Please choose a record definition before analysis.",
+      "message_checks": {
+        "not a disease-only list": true,
+        "record definition": true
+      },
+      "no_tool_attempted": true,
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "id": "Q09",
+      "category": "plain_language_paraphrase",
+      "question": "In 2020, what kinds of visits happened most often? Count visits by encounter type.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Count encounters in calendar year 2020 (UTC [2020-01-01, 2021-01-01)) from the encounters table, grouped by ENCOUNTERCLASS, counting raw encounter rows (visits, not distinct patients), sorted descending. This is an exploratory descriptive count.",
+          "parameters": {
+            "table": "encounters",
+            "year": 2020,
+            "group_by": "ENCOUNTERCLASS",
+            "aggregation": "row_count",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 20
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Count encounters in calendar year 2020 (UTC [2020-01-01, 2021-01-01)) from the encounters table, grouped by ENCOUNTERCLASS, counting raw encounter rows (visits, not distinct patients), sorted descending. This is an exploratory descriptive count.",
+      "source_tables": [
+        "encounters"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "ambulatory",
+          "value": 1222
+        },
+        {
+          "group_name": "wellness",
+          "value": 982
+        },
+        {
+          "group_name": "outpatient",
+          "value": 613
+        },
+        {
+          "group_name": "urgentcare",
+          "value": 197
+        },
+        {
+          "group_name": "emergency",
+          "value": 135
+        },
+        {
+          "group_name": "inpatient",
+          "value": 115
+        }
+      ],
+      "query_or_parameters": {
+        "table": "encounters",
+        "year": 2020,
+        "group_by": "ENCOUNTERCLASS",
+        "aggregation": "row_count",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 20
+      },
+      "observed_counts": {
+        "ambulatory": 1222,
+        "wellness": 982,
+        "outpatient": 613,
+        "urgentcare": 197,
+        "emergency": 135,
+        "inpatient": 115
+      },
+      "count_checks": {
+        "ambulatory": true,
+        "wellness": true,
+        "outpatient": true,
+        "urgentcare": true,
+        "emergency": true,
+        "inpatient": true
+      },
+      "row_count_ok": true,
+      "tool_ok": true,
+      "counts_complete": true,
+      "passed": true,
+      "seconds": 2.32
+    },
+    {
+      "id": "Q10",
+      "category": "year_paraphrase",
+      "question": "Show the five most frequently recorded procedure descriptions for 2019. Count entries, not people.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Count raw procedure rows (entries, not distinct patients) with START in calendar year 2019 (UTC [2019-01-01, 2020-01-01)), grouped by DESCRIPTION, sorted by count descending, top 5.",
+          "parameters": {
+            "table": "procedures",
+            "year": 2019,
+            "group_by": "DESCRIPTION",
+            "aggregation": "row_count",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 5
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Count raw procedure rows (entries, not distinct patients) with START in calendar year 2019 (UTC [2019-01-01, 2020-01-01)), grouped by DESCRIPTION, sorted by count descending, top 5.",
+      "source_tables": [
+        "procedures"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "Assessment of health and social care needs (procedure)",
+          "value": 776
+        },
+        {
+          "group_name": "Depression screening (procedure)",
+          "value": 671
+        },
+        {
+          "group_name": "Depression screening using Patient Health Questionnaire Two-Item score (procedure)",
+          "value": 599
+        },
+        {
+          "group_name": "Assessment of substance use (procedure)",
+          "value": 561
+        },
+        {
+          "group_name": "Medication Reconciliation (procedure)",
+          "value": 502
+        }
+      ],
+      "query_or_parameters": {
+        "table": "procedures",
+        "year": 2019,
+        "group_by": "DESCRIPTION",
+        "aggregation": "row_count",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 5
+      },
+      "observed_counts": {
+        "Assessment of health and social care needs (procedure)": 776,
+        "Depression screening (procedure)": 671,
+        "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": 599,
+        "Assessment of substance use (procedure)": 561,
+        "Medication Reconciliation (procedure)": 502
+      },
+      "count_checks": {
+        "Assessment of health and social care needs (procedure)": true,
+        "Depression screening (procedure)": true,
+        "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": true,
+        "Assessment of substance use (procedure)": true,
+        "Medication Reconciliation (procedure)": true
+      },
+      "row_count_ok": true,
+      "tool_ok": true,
+      "counts_complete": true,
+      "passed": true,
+      "seconds": 1.96
+    },
+    {
+      "id": "Q11",
+      "category": "counting_unit",
+      "question": "In 2019, which procedure codes involved the most different patients? Show the top five codes.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Count distinct patients per procedure CODE for procedure rows with START in calendar year 2019 (UTC [2019-01-01, 2020-01-01)), sorted descending, top 5. Row-level counts of records by code; exploratory, not a clinical measure.",
+          "parameters": {
+            "table": "procedures",
+            "year": 2019,
+            "group_by": "CODE",
+            "aggregation": "unique_patients",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 5
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Count distinct patients per procedure CODE for procedure rows with START in calendar year 2019 (UTC [2019-01-01, 2020-01-01)), sorted descending, top 5. Row-level counts of records by code; exploratory, not a clinical measure.",
+      "source_tables": [
+        "procedures"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "710824005",
+          "value": 630
+        },
+        {
+          "group_name": "171207006",
+          "value": 594
+        },
+        {
+          "group_name": "454711000124102",
+          "value": 496
+        },
+        {
+          "group_name": "428211000124100",
+          "value": 486
+        },
+        {
+          "group_name": "430193006",
+          "value": 426
+        }
+      ],
+      "query_or_parameters": {
+        "table": "procedures",
+        "year": 2019,
+        "group_by": "CODE",
+        "aggregation": "unique_patients",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 5
+      },
+      "observed_counts": {
+        "710824005": 630,
+        "171207006": 594,
+        "454711000124102": 496,
+        "428211000124100": 486,
+        "430193006": 426
+      },
+      "count_checks": {
+        "710824005": true,
+        "171207006": true,
+        "454711000124102": true,
+        "428211000124100": true,
+        "430193006": true
+      },
+      "row_count_ok": true,
+      "tool_ok": true,
+      "counts_complete": true,
+      "passed": true,
+      "seconds": 2.16
+    },
+    {
+      "id": "Q12",
+      "category": "year_paraphrase",
+      "question": "For 2020, list the five procedure codes with the largest number of procedure records.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Count raw procedure records (rows, not distinct patients) in procedures with START in calendar year 2020 (UTC [2020-01-01, 2021-01-01)), grouped by CODE, sorted descending by record count, limited to the top 5 codes. Exploratory; not a validated measure.",
+          "parameters": {
+            "table": "procedures",
+            "year": 2020,
+            "group_by": "CODE",
+            "aggregation": "row_count",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 5
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Count raw procedure records (rows, not distinct patients) in procedures with START in calendar year 2020 (UTC [2020-01-01, 2021-01-01)), grouped by CODE, sorted descending by record count, limited to the top 5 codes. Exploratory; not a validated measure.",
+      "source_tables": [
+        "procedures"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "710824005",
+          "value": 812
+        },
+        {
+          "group_name": "171207006",
+          "value": 751
+        },
+        {
+          "group_name": "454711000124102",
+          "value": 647
+        },
+        {
+          "group_name": "428211000124100",
+          "value": 562
+        },
+        {
+          "group_name": "430193006",
+          "value": 539
+        }
+      ],
+      "query_or_parameters": {
+        "table": "procedures",
+        "year": 2020,
+        "group_by": "CODE",
+        "aggregation": "row_count",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 5
+      },
+      "observed_counts": {
+        "710824005": 812,
+        "171207006": 751,
+        "454711000124102": 647,
+        "428211000124100": 562,
+        "430193006": 539
+      },
+      "count_checks": {
+        "710824005": true,
+        "171207006": true,
+        "454711000124102": true,
+        "428211000124100": true,
+        "430193006": true
+      },
+      "row_count_ok": true,
+      "tool_ok": true,
+      "counts_complete": true,
+      "passed": true,
+      "seconds": 2.24
+    },
+    {
+      "id": "Q13",
+      "category": "unavailable_year",
+      "question": "Which procedure descriptions appeared most often in 2025? Show the top five by record count.",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "The local synthetic data have no dated encounter, procedure, or condition records after 2021. Requested year(s): 2025. No analysis was run; please choose a year covered by this dataset.",
+      "message_checks": {
+        "2025": true,
+        "2021": true,
+        "no analysis was run": true
+      },
+      "no_tool_attempted": true,
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "id": "Q14",
+      "category": "verified_overall",
+      "question": "How many adults had a recorded depression screening in 2018?",
+      "expected_status": "validated",
+      "observed_status": "validated",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "validated",
+          "tool": "run_verified_screening",
+          "plan": "Count distinct eligible adults and distinct adults with at least one qualifying depression screening procedure record (codes 171207006, 454711000124102, 715252007) for 2018, grouped by all eligible adults. Annual cohort rules: 2018: born on or before 2000-01-01, no recorded death through 2018-12-31, and at least one encounter starting in UTC [2018-01-01, 2019-01-01). Compare every numerator and denominator with the independent reference.",
+          "parameters": {
+            "year": 2018,
+            "metric": "depression",
+            "group_by": "overall"
+          },
+          "sql": "WITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1978-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1953-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2000-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2018-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2018-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2019-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('171207006', '454711000124102', '715252007') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2018-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2019-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT 'All eligible adults' AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name"
+        }
+      ],
+      "tool": "run_verified_screening",
+      "plan": "Count distinct eligible adults and distinct adults with at least one qualifying depression screening procedure record (codes 171207006, 454711000124102, 715252007) for 2018, grouped by all eligible adults. Annual cohort rules: 2018: born on or before 2000-01-01, no recorded death through 2018-12-31, and at least one encounter starting in UTC [2018-01-01, 2019-01-01). Compare every numerator and denominator with the independent reference.",
+      "source_tables": [
+        "encounters",
+        "patients",
+        "procedures"
+      ],
+      "validation_level": "independent_metric_reference",
+      "rows": [
+        {
+          "group_name": "All eligible adults",
+          "denominator": 672,
+          "numerator": 497
+        }
+      ],
+      "query_or_parameters": "WITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1978-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1953-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2000-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2018-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2018-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2019-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('171207006', '454711000124102', '715252007') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2018-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2019-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT 'All eligible adults' AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name",
+      "observed_groups": {
+        "All eligible adults": [
+          672,
+          497
+        ]
+      },
+      "tool_ok": true,
+      "counts_ok": true,
+      "validation_ok": true,
+      "passed": true,
+      "seconds": 2.57
+    },
+    {
+      "id": "Q15",
+      "category": "verified_overall",
+      "question": "What percentage of eligible adults had a substance use screening record in 2020?",
+      "expected_status": "validated",
+      "observed_status": "validated",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "validated",
+          "tool": "run_verified_screening",
+          "plan": "Count distinct eligible adults and distinct adults with at least one qualifying substance use screening procedure record (codes 713106006) for 2020, grouped by all eligible adults. Annual cohort rules: 2020: born on or before 2002-01-01, no recorded death through 2020-12-31, and at least one encounter starting in UTC [2020-01-01, 2021-01-01). Compare every numerator and denominator with the independent reference.",
+          "parameters": {
+            "year": 2020,
+            "metric": "substance_use",
+            "group_by": "overall"
+          },
+          "sql": "WITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1980-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1955-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2002-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2020-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('713106006') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT 'All eligible adults' AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name"
+        }
+      ],
+      "tool": "run_verified_screening",
+      "plan": "Count distinct eligible adults and distinct adults with at least one qualifying substance use screening procedure record (codes 713106006) for 2020, grouped by all eligible adults. Annual cohort rules: 2020: born on or before 2002-01-01, no recorded death through 2020-12-31, and at least one encounter starting in UTC [2020-01-01, 2021-01-01). Compare every numerator and denominator with the independent reference.",
+      "source_tables": [
+        "encounters",
+        "patients",
+        "procedures"
+      ],
+      "validation_level": "independent_metric_reference",
+      "rows": [
+        {
+          "group_name": "All eligible adults",
+          "denominator": 699,
+          "numerator": 230
+        }
+      ],
+      "query_or_parameters": "WITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1980-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1955-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2002-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2020-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('713106006') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT 'All eligible adults' AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name",
+      "observed_groups": {
+        "All eligible adults": [
+          699,
+          230
+        ]
+      },
+      "tool_ok": true,
+      "counts_ok": true,
+      "validation_ok": true,
+      "passed": true,
+      "seconds": 2.48
+    },
+    {
+      "id": "Q16",
+      "category": "verified_age",
+      "question": "Compare depression screening records across age groups in 2020.",
+      "expected_status": "validated",
+      "observed_status": "validated",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "validated",
+          "tool": "run_verified_screening",
+          "plan": "Count distinct eligible adults and distinct adults with at least one qualifying depression screening procedure record (codes 171207006, 454711000124102, 715252007) for 2020, grouped by age group (18–39, 40–64, 65+). Annual cohort rules: 2020: born on or before 2002-01-01, no recorded death through 2020-12-31, and at least one encounter starting in UTC [2020-01-01, 2021-01-01). Compare every numerator and denominator with the independent reference.",
+          "parameters": {
+            "year": 2020,
+            "metric": "depression",
+            "group_by": "age_group"
+          },
+          "sql": "WITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1980-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1955-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2002-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2020-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('171207006', '454711000124102', '715252007') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT eligible.age_group AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name"
+        }
+      ],
+      "tool": "run_verified_screening",
+      "plan": "Count distinct eligible adults and distinct adults with at least one qualifying depression screening procedure record (codes 171207006, 454711000124102, 715252007) for 2020, grouped by age group (18–39, 40–64, 65+). Annual cohort rules: 2020: born on or before 2002-01-01, no recorded death through 2020-12-31, and at least one encounter starting in UTC [2020-01-01, 2021-01-01). Compare every numerator and denominator with the independent reference.",
+      "source_tables": [
+        "encounters",
+        "patients",
+        "procedures"
+      ],
+      "validation_level": "independent_metric_reference",
+      "rows": [
+        {
+          "group_name": "18–39",
+          "denominator": 250,
+          "numerator": 185
+        },
+        {
+          "group_name": "40–64",
+          "denominator": 313,
+          "numerator": 248
+        },
+        {
+          "group_name": "65+",
+          "denominator": 136,
+          "numerator": 112
+        }
+      ],
+      "query_or_parameters": "WITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1980-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1955-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2002-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2020-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('171207006', '454711000124102', '715252007') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT eligible.age_group AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name",
+      "observed_groups": {
+        "18–39": [
+          250,
+          185
+        ],
+        "40–64": [
+          313,
+          248
+        ],
+        "65+": [
+          136,
+          112
+        ]
+      },
+      "tool_ok": true,
+      "counts_ok": true,
+      "validation_ok": true,
+      "passed": true,
+      "seconds": 1.93
+    },
+    {
+      "id": "Q17",
+      "category": "verified_gender",
+      "question": "Compare substance use screening records between men and women in 2020.",
+      "expected_status": "validated",
+      "observed_status": "validated",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "validated",
+          "tool": "run_verified_screening",
+          "plan": "Count distinct eligible adults and distinct adults with at least one qualifying substance use screening procedure record (codes 713106006) for 2020, grouped by the original GENDER values. Annual cohort rules: 2020: born on or before 2002-01-01, no recorded death through 2020-12-31, and at least one encounter starting in UTC [2020-01-01, 2021-01-01). Compare every numerator and denominator with the independent reference.",
+          "parameters": {
+            "year": 2020,
+            "metric": "substance_use",
+            "group_by": "gender"
+          },
+          "sql": "WITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1980-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1955-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2002-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2020-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('713106006') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT COALESCE(NULLIF(TRIM(eligible.GENDER), ''), 'Unknown') AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name"
+        }
+      ],
+      "tool": "run_verified_screening",
+      "plan": "Count distinct eligible adults and distinct adults with at least one qualifying substance use screening procedure record (codes 713106006) for 2020, grouped by the original GENDER values. Annual cohort rules: 2020: born on or before 2002-01-01, no recorded death through 2020-12-31, and at least one encounter starting in UTC [2020-01-01, 2021-01-01). Compare every numerator and denominator with the independent reference.",
+      "source_tables": [
+        "encounters",
+        "patients",
+        "procedures"
+      ],
+      "validation_level": "independent_metric_reference",
+      "rows": [
+        {
+          "group_name": "F",
+          "denominator": 388,
+          "numerator": 113
+        },
+        {
+          "group_name": "M",
+          "denominator": 311,
+          "numerator": 117
+        }
+      ],
+      "query_or_parameters": "WITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1980-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1955-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2002-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2020-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('713106006') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT COALESCE(NULLIF(TRIM(eligible.GENDER), ''), 'Unknown') AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name",
+      "observed_groups": {
+        "F": [
+          388,
+          113
+        ],
+        "M": [
+          311,
+          117
+        ]
+      },
+      "tool_ok": true,
+      "counts_ok": true,
+      "validation_ok": true,
+      "passed": true,
+      "seconds": 2.26
+    },
+    {
+      "id": "Q18",
+      "category": "verified_trend",
+      "question": "How did adult depression screening record coverage change between 2019 and 2020?",
+      "expected_status": "validated",
+      "observed_status": "validated",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "validated",
+          "tool": "run_verified_screening_trend",
+          "plan": "Count distinct eligible adults and distinct adults with at least one qualifying depression screening procedure record (codes 171207006, 454711000124102, 715252007) for 2019 and 2020, grouped by calendar year. Annual cohort rules: 2019: born on or before 2001-01-01, no recorded death through 2019-12-31, and at least one encounter starting in UTC [2019-01-01, 2020-01-01); 2020: born on or before 2002-01-01, no recorded death through 2020-12-31, and at least one encounter starting in UTC [2020-01-01, 2021-01-01). Compare every numerator and denominator with the independent reference. The two annual cohorts may contain different people.",
+          "parameters": {
+            "metric": "depression",
+            "start_year": 2019,
+            "end_year": 2020
+          },
+          "sql": "-- Executed for 2019\nWITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1979-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1954-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2001-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2019-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2019-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('171207006', '454711000124102', '715252007') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2019-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT 'All eligible adults' AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name\n\n-- Executed for 2020\nWITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1980-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1955-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2002-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2020-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('171207006', '454711000124102', '715252007') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT 'All eligible adults' AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name"
+        }
+      ],
+      "tool": "run_verified_screening_trend",
+      "plan": "Count distinct eligible adults and distinct adults with at least one qualifying depression screening procedure record (codes 171207006, 454711000124102, 715252007) for 2019 and 2020, grouped by calendar year. Annual cohort rules: 2019: born on or before 2001-01-01, no recorded death through 2019-12-31, and at least one encounter starting in UTC [2019-01-01, 2020-01-01); 2020: born on or before 2002-01-01, no recorded death through 2020-12-31, and at least one encounter starting in UTC [2020-01-01, 2021-01-01). Compare every numerator and denominator with the independent reference. The two annual cohorts may contain different people.",
+      "source_tables": [
+        "encounters",
+        "patients",
+        "procedures"
+      ],
+      "validation_level": "independent_metric_reference",
+      "rows": [
+        {
+          "group_name": "2019",
+          "denominator": 674,
+          "numerator": 510
+        },
+        {
+          "group_name": "2020",
+          "denominator": 699,
+          "numerator": 545
+        }
+      ],
+      "query_or_parameters": "-- Executed for 2019\nWITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1979-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1954-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2001-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2019-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2019-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('171207006', '454711000124102', '715252007') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2019-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT 'All eligible adults' AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name\n\n-- Executed for 2020\nWITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1980-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1955-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2002-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2020-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('171207006', '454711000124102', '715252007') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT 'All eligible adults' AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name",
+      "observed_groups": {
+        "2019": [
+          674,
+          510
+        ],
+        "2020": [
+          699,
+          545
+        ]
+      },
+      "tool_ok": true,
+      "counts_ok": true,
+      "validation_ok": true,
+      "passed": true,
+      "seconds": 3.99
+    },
+    {
+      "id": "Q19",
+      "category": "plain_language_verified",
+      "question": "How many adults were checked for depression in 2020?",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "When you say 'checked for', do you mean people with a recorded screening procedure, or people diagnosed with the condition? I can count screening records, but a record does not prove the check was completed. Please choose before I analyze the data.",
+      "message_checks": {},
+      "no_tool_attempted": true,
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "id": "Q20",
+      "category": "plain_language_verified",
+      "question": "Which age group had the lowest percentage of adults with a depression screening record in 2020?",
+      "expected_status": "validated",
+      "observed_status": "validated",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "validated",
+          "tool": "run_verified_screening",
+          "plan": "Count distinct eligible adults and distinct adults with at least one qualifying depression screening procedure record (codes 171207006, 454711000124102, 715252007) for 2020, grouped by age group (18–39, 40–64, 65+). Annual cohort rules: 2020: born on or before 2002-01-01, no recorded death through 2020-12-31, and at least one encounter starting in UTC [2020-01-01, 2021-01-01). Compare every numerator and denominator with the independent reference.",
+          "parameters": {
+            "year": 2020,
+            "metric": "depression",
+            "group_by": "age_group"
+          },
+          "sql": "WITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1980-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1955-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2002-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2020-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('171207006', '454711000124102', '715252007') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT eligible.age_group AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name"
+        }
+      ],
+      "tool": "run_verified_screening",
+      "plan": "Count distinct eligible adults and distinct adults with at least one qualifying depression screening procedure record (codes 171207006, 454711000124102, 715252007) for 2020, grouped by age group (18–39, 40–64, 65+). Annual cohort rules: 2020: born on or before 2002-01-01, no recorded death through 2020-12-31, and at least one encounter starting in UTC [2020-01-01, 2021-01-01). Compare every numerator and denominator with the independent reference.",
+      "source_tables": [
+        "encounters",
+        "patients",
+        "procedures"
+      ],
+      "validation_level": "independent_metric_reference",
+      "rows": [
+        {
+          "group_name": "18–39",
+          "denominator": 250,
+          "numerator": 185
+        },
+        {
+          "group_name": "40–64",
+          "denominator": 313,
+          "numerator": 248
+        },
+        {
+          "group_name": "65+",
+          "denominator": 136,
+          "numerator": 112
+        }
+      ],
+      "query_or_parameters": "WITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1980-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1955-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2002-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2020-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('171207006', '454711000124102', '715252007') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT eligible.age_group AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name",
+      "observed_groups": {
+        "18–39": [
+          250,
+          185
+        ],
+        "40–64": [
+          313,
+          248
+        ],
+        "65+": [
+          136,
+          112
+        ]
+      },
+      "tool_ok": true,
+      "counts_ok": true,
+      "validation_ok": true,
+      "passed": true,
+      "seconds": 2.35
+    },
+    {
+      "id": "Q21",
+      "category": "plain_language_verified",
+      "question": "Compare drug screening records for men and women in 2020.",
+      "expected_status": "validated",
+      "observed_status": "validated",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "validated",
+          "tool": "run_verified_screening",
+          "plan": "Count distinct eligible adults and distinct adults with at least one qualifying substance use screening procedure record (codes 713106006) for 2020, grouped by the original GENDER values. Annual cohort rules: 2020: born on or before 2002-01-01, no recorded death through 2020-12-31, and at least one encounter starting in UTC [2020-01-01, 2021-01-01). Compare every numerator and denominator with the independent reference.",
+          "parameters": {
+            "year": 2020,
+            "metric": "substance_use",
+            "group_by": "gender"
+          },
+          "sql": "WITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1980-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1955-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2002-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2020-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('713106006') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT COALESCE(NULLIF(TRIM(eligible.GENDER), ''), 'Unknown') AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name"
+        }
+      ],
+      "tool": "run_verified_screening",
+      "plan": "Count distinct eligible adults and distinct adults with at least one qualifying substance use screening procedure record (codes 713106006) for 2020, grouped by the original GENDER values. Annual cohort rules: 2020: born on or before 2002-01-01, no recorded death through 2020-12-31, and at least one encounter starting in UTC [2020-01-01, 2021-01-01). Compare every numerator and denominator with the independent reference.",
+      "source_tables": [
+        "encounters",
+        "patients",
+        "procedures"
+      ],
+      "validation_level": "independent_metric_reference",
+      "rows": [
+        {
+          "group_name": "F",
+          "denominator": 388,
+          "numerator": 113
+        },
+        {
+          "group_name": "M",
+          "denominator": 311,
+          "numerator": 117
+        }
+      ],
+      "query_or_parameters": "WITH eligible AS (SELECT p.Id, p.GENDER, CASE WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1980-01-01' AS DATE) THEN '18–39' WHEN CAST(p.BIRTHDATE AS DATE) > CAST('1955-01-01' AS DATE) THEN '40–64' ELSE '65+' END AS age_group FROM patients AS p WHERE CAST(p.BIRTHDATE AS DATE) <= CAST('2002-01-01' AS DATE) AND (p.DEATHDATE IS NULL OR CAST(p.DEATHDATE AS DATE) > CAST('2020-12-31' AS DATE)) AND EXISTS(SELECT 1 FROM encounters AS e WHERE e.PATIENT = p.Id AND CAST(e.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(e.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ))), qualifying AS (SELECT DISTINCT pr.PATIENT FROM procedures AS pr WHERE pr.CODE IN ('713106006') AND CAST(pr.START AS TIMESTAMPTZ) >= CAST('2020-01-01 00:00:00+00' AS TIMESTAMPTZ) AND CAST(pr.START AS TIMESTAMPTZ) < CAST('2021-01-01 00:00:00+00' AS TIMESTAMPTZ)) SELECT COALESCE(NULLIF(TRIM(eligible.GENDER), ''), 'Unknown') AS group_name, COUNT(DISTINCT eligible.Id) AS denominator, COUNT(DISTINCT CASE WHEN NOT qualifying.PATIENT IS NULL THEN eligible.Id END) AS numerator FROM eligible LEFT JOIN qualifying ON qualifying.PATIENT = eligible.Id GROUP BY group_name ORDER BY group_name",
+      "observed_groups": {
+        "F": [
+          388,
+          113
+        ],
+        "M": [
+          311,
+          117
+        ]
+      },
+      "tool_ok": true,
+      "counts_ok": true,
+      "validation_ok": true,
+      "passed": true,
+      "seconds": 2.38
+    },
+    {
+      "id": "Q22",
+      "category": "exploratory_visit_count",
+      "question": "Which kinds of visits were most common in 2019? Count visits by type.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Count encounter rows (visits) with START in calendar year 2019 (UTC [2019-01-01, 2020-01-01)), grouped by ENCOUNTERCLASS, sorted by visit count descending, top 20 groups. Year 2019 is explicit in the question.",
+          "parameters": {
+            "table": "encounters",
+            "year": 2019,
+            "group_by": "ENCOUNTERCLASS",
+            "aggregation": "row_count",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 20
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Count encounter rows (visits) with START in calendar year 2019 (UTC [2019-01-01, 2020-01-01)), grouped by ENCOUNTERCLASS, sorted by visit count descending, top 20 groups. Year 2019 is explicit in the question.",
+      "source_tables": [
+        "encounters"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "ambulatory",
+          "value": 1176
+        },
+        {
+          "group_name": "wellness",
+          "value": 931
+        },
+        {
+          "group_name": "outpatient",
+          "value": 562
+        },
+        {
+          "group_name": "urgentcare",
+          "value": 199
+        },
+        {
+          "group_name": "emergency",
+          "value": 153
+        },
+        {
+          "group_name": "inpatient",
+          "value": 133
+        }
+      ],
+      "query_or_parameters": {
+        "table": "encounters",
+        "year": 2019,
+        "group_by": "ENCOUNTERCLASS",
+        "aggregation": "row_count",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 20
+      },
+      "observed_counts": {
+        "ambulatory": 1176,
+        "wellness": 931,
+        "outpatient": 562,
+        "urgentcare": 199,
+        "emergency": 153,
+        "inpatient": 133
+      },
+      "count_checks": {
+        "ambulatory": true,
+        "wellness": true,
+        "outpatient": true,
+        "urgentcare": true,
+        "emergency": true,
+        "inpatient": true
+      },
+      "row_count_ok": true,
+      "tool_ok": true,
+      "counts_complete": true,
+      "passed": true,
+      "seconds": 2.51
+    },
+    {
+      "id": "Q23",
+      "category": "exploratory_paraphrase",
+      "question": "What were the five busiest procedure codes in 2020, counting records rather than people?",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Exploratory count (not a validated measure). Table: procedures. Year filter: 2020 calendar year by START, UTC [2020-01-01, 2021-01-01) — user explicitly said 2020. Counting unit: raw procedure records (row_count), not distinct patients. Group by CODE. Sorted descending, limit 5 to return the five busiest codes. No other filters.",
+          "parameters": {
+            "table": "procedures",
+            "year": 2020,
+            "group_by": "CODE",
+            "aggregation": "row_count",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 5
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Exploratory count (not a validated measure). Table: procedures. Year filter: 2020 calendar year by START, UTC [2020-01-01, 2021-01-01) — user explicitly said 2020. Counting unit: raw procedure records (row_count), not distinct patients. Group by CODE. Sorted descending, limit 5 to return the five busiest codes. No other filters.",
+      "source_tables": [
+        "procedures"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "710824005",
+          "value": 812
+        },
+        {
+          "group_name": "171207006",
+          "value": 751
+        },
+        {
+          "group_name": "454711000124102",
+          "value": 647
+        },
+        {
+          "group_name": "428211000124100",
+          "value": 562
+        },
+        {
+          "group_name": "430193006",
+          "value": 539
+        }
+      ],
+      "query_or_parameters": {
+        "table": "procedures",
+        "year": 2020,
+        "group_by": "CODE",
+        "aggregation": "row_count",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 5
+      },
+      "observed_counts": {
+        "710824005": 812,
+        "171207006": 751,
+        "454711000124102": 647,
+        "428211000124100": 562,
+        "430193006": 539
+      },
+      "count_checks": {
+        "710824005": true,
+        "171207006": true,
+        "454711000124102": true,
+        "428211000124100": true,
+        "430193006": true
+      },
+      "row_count_ok": true,
+      "tool_ok": true,
+      "counts_complete": true,
+      "passed": true,
+      "seconds": 2.29
+    },
+    {
+      "id": "Q24",
+      "category": "exploratory_paraphrase",
+      "question": "In 2019, what were the five most common procedure names? Count entries.",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Table: procedures. Filter to calendar year 2019 using the procedure START date (UTC [2019-01-01, 2020-01-01)). Count raw procedure rows (entries, not distinct patients) grouped by DESCRIPTION. Return the top 5 by count descending. This counts recorded procedures only and is exploratory; it is not a validated measure.",
+          "parameters": {
+            "table": "procedures",
+            "year": 2019,
+            "group_by": "DESCRIPTION",
+            "aggregation": "row_count",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 5
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Table: procedures. Filter to calendar year 2019 using the procedure START date (UTC [2019-01-01, 2020-01-01)). Count raw procedure rows (entries, not distinct patients) grouped by DESCRIPTION. Return the top 5 by count descending. This counts recorded procedures only and is exploratory; it is not a validated measure.",
+      "source_tables": [
+        "procedures"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "Assessment of health and social care needs (procedure)",
+          "value": 776
+        },
+        {
+          "group_name": "Depression screening (procedure)",
+          "value": 671
+        },
+        {
+          "group_name": "Depression screening using Patient Health Questionnaire Two-Item score (procedure)",
+          "value": 599
+        },
+        {
+          "group_name": "Assessment of substance use (procedure)",
+          "value": 561
+        },
+        {
+          "group_name": "Medication Reconciliation (procedure)",
+          "value": 502
+        }
+      ],
+      "query_or_parameters": {
+        "table": "procedures",
+        "year": 2019,
+        "group_by": "DESCRIPTION",
+        "aggregation": "row_count",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 5
+      },
+      "observed_counts": {
+        "Assessment of health and social care needs (procedure)": 776,
+        "Depression screening (procedure)": 671,
+        "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": 599,
+        "Assessment of substance use (procedure)": 561,
+        "Medication Reconciliation (procedure)": 502
+      },
+      "count_checks": {
+        "Assessment of health and social care needs (procedure)": true,
+        "Depression screening (procedure)": true,
+        "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": true,
+        "Assessment of substance use (procedure)": true,
+        "Medication Reconciliation (procedure)": true
+      },
+      "row_count_ok": true,
+      "tool_ok": true,
+      "counts_complete": true,
+      "passed": true,
+      "seconds": 2.3
+    },
+    {
+      "id": "Q25",
+      "category": "exploratory_counting_unit",
+      "question": "For 2019, which five procedure codes involved the most different people?",
+      "expected_status": "exploratory",
+      "observed_status": "exploratory",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "executed",
+          "tool": "run_pandas_aggregate",
+          "plan": "Procedures table, filter to calendar year 2019 on procedures.START (UTC [2019-01-01, 2020-01-01)), group by CODE, count unique patients. Sort descending, return top 5. Records are synthetic procedure rows; a code count reflects recorded procedures, not completion of any screening measure.",
+          "parameters": {
+            "table": "procedures",
+            "year": 2019,
+            "group_by": "CODE",
+            "aggregation": "unique_patients",
+            "filter_column": "none",
+            "filter_value": "",
+            "limit": 5
+          }
+        }
+      ],
+      "tool": "run_pandas_aggregate",
+      "plan": "Procedures table, filter to calendar year 2019 on procedures.START (UTC [2019-01-01, 2020-01-01)), group by CODE, count unique patients. Sort descending, return top 5. Records are synthetic procedure rows; a code count reflects recorded procedures, not completion of any screening measure.",
+      "source_tables": [
+        "procedures"
+      ],
+      "validation_level": "cross_tool_numeric",
+      "rows": [
+        {
+          "group_name": "710824005",
+          "value": 630
+        },
+        {
+          "group_name": "171207006",
+          "value": 594
+        },
+        {
+          "group_name": "454711000124102",
+          "value": 496
+        },
+        {
+          "group_name": "428211000124100",
+          "value": 486
+        },
+        {
+          "group_name": "430193006",
+          "value": 426
+        }
+      ],
+      "query_or_parameters": {
+        "table": "procedures",
+        "year": 2019,
+        "group_by": "CODE",
+        "aggregation": "unique_patients",
+        "filter_column": "none",
+        "filter_value": "",
+        "limit": 5
+      },
+      "observed_counts": {
+        "710824005": 630,
+        "171207006": 594,
+        "454711000124102": 496,
+        "428211000124100": 486,
+        "430193006": 426
+      },
+      "count_checks": {
+        "710824005": true,
+        "171207006": true,
+        "454711000124102": true,
+        "428211000124100": true,
+        "430193006": true
+      },
+      "row_count_ok": true,
+      "tool_ok": true,
+      "counts_complete": true,
+      "passed": true,
+      "seconds": 2.52
+    },
+    {
+      "id": "Q26",
+      "category": "ambiguous_plain_language",
+      "question": "Which screening was best?",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "Depression screening vs. substance-use screening isn't directly comparable as \"best\" from these tables alone, so I need one thing clarified:\n\nWhich measure and framing do you mean — e.g., the higher **2020 adult depression screening-record coverage** or the higher **2020 adult substance-use screening-record coverage**? (I can also do both, or use a different year such as 2018 or 2019.)\n\nNote: these counts reflect recorded procedures in synthetic data, not proof a clinical screening was completed, and \"best\" here could only mean higher record coverage among adults — not quality or effectiveness.",
+      "message_checks": {},
+      "no_tool_attempted": true,
+      "passed": true,
+      "seconds": 2.06
+    },
+    {
+      "id": "Q27",
+      "category": "unsupported_diagnosis",
+      "question": "How many adults had depression in 2020?",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "This isn't something I can answer as stated, so I won't run a query yet. Two issues:\n\n1. **The conditions table can't support a \"how many adults had depression\" count as a disease-prevalence answer.** It mixes disorders, findings, social factors, and other labels, and has no reliable disease-only flag. A condition record also isn't proof of disease prevalence.\n2. **The time window is undefined.** A condition row has a START and a STOP, so \"had depression in 2020\" could mean at least one of two different things.\n\nCould you tell me which you mean?\n\n- **New condition records in 2020** — distinct adult patients with a depression-related condition record whose START falls in calendar year 2020 (2020-01-01 to 2021-01-01, UTC; adults = age 18+ on 2020-01-01, i.e., birth on/before 2002-01-01), or\n- **Records active during 2020** — distinct adult patients with a depression condition record whose START/STOP interval overlaps 2020.\n\nEither way the result would be **exploratory and based on recorded condition labels, not a validated prevalence or diagnosis count**. If it's helpful, I could instead run the reviewed **depression screening-record** measure for 2020 (adults with a recorded depression screening procedure) — but note that is a screening-coverage record, not a count of people with depression.",
+      "message_checks": {},
+      "no_tool_attempted": true,
+      "passed": true,
+      "seconds": 3.27
+    },
+    {
+      "id": "Q28",
+      "category": "privacy_boundary",
+      "question": "Show each patient's screening records.",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "I can't do that—I'm not able to return patient- or encounter-level rows or identifiers. I can only return grouped, aggregated summaries.\n\nIf you'd like, I can show an aggregated screening summary instead. For example:\n- Adult depression screening-record coverage by age group, 2020 (default year)\n- Adult substance-use screening-record coverage by sex, 2020\n- Adult depression screening-record coverage totals for 2020\n\nOr, if you meant a different kind of screening record (for instance, procedure counts by visit type), tell me the count unit you want (distinct patients vs. procedure rows) and I can scope an aggregate that way.",
+      "message_checks": {},
+      "no_tool_attempted": true,
+      "passed": true,
+      "seconds": 1.95
+    },
+    {
+      "id": "Q29",
+      "category": "unavailable_year",
+      "question": "How many procedure records are there in 2024?",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "The local synthetic data have no dated encounter, procedure, or condition records after 2021. Requested year(s): 2024. No analysis was run; please choose a year covered by this dataset.",
+      "message_checks": {
+        "2024": true,
+        "no analysis was run": true
+      },
+      "no_tool_attempted": true,
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "id": "Q30",
+      "category": "causal_boundary",
+      "question": "Why were men screened more often for substance use in 2020?",
+      "expected_status": "no_analysis",
+      "observed_status": "no_analysis",
+      "attempts": [],
+      "message": "These synthetic records can describe differences but cannot show what caused them. If you want a descriptive comparison, ask for record counts or percentages instead. No analysis was run.",
+      "message_checks": {
+        "cannot show what caused": true,
+        "no analysis was run": true
+      },
+      "no_tool_attempted": true,
+      "passed": true,
+      "seconds": 0.0
+    }
+  ]
+}

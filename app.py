@@ -96,14 +96,12 @@ with st.expander("Example questions", expanded=True):
 
 with st.expander("Evaluation: what has been checked"):
     st.markdown(
-        "**30-question fixed evaluation:** 27/30 on the original live run and "
-        "29/30 after correcting two overly literal response-phrase checks using "
-        "the saved outputs. The remaining failure was an ambiguous question for "
-        "which the model proposed a tool before the request check rejected it. "
-        "That wording was subsequently fixed in local tests; the 30-question live "
-        "run has not yet been repeated. These results are not a general accuracy "
-        "or routing estimate. "
-        "Earlier failures and evaluator corrections are documented in "
+        "**Latest live fixed evaluation: 30/30 observed passes** after the "
+        "clarification change (7 reviewed screening cases, 12 exploratory cases, "
+        "11 clarification or refusal cases). This is one run of a fixed question "
+        "set, not a general accuracy or clinical validity estimate. An earlier run "
+        "scored 27/30 initially and 29/30 after two scoring corrections. "
+        "Saved results, earlier failures, and evaluator corrections are in "
         "[the evaluation report](https://github.com/yc4959/CareInsight-AI/blob/main/evaluation/report.md)."
     )
 

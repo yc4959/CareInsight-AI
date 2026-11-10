@@ -6,7 +6,7 @@
 
 - **Ask a data question:** The model chooses a reviewed screening measure, restricted SQL, or parameterized Pandas, then the app shows a table, chart, and analysis trace.
 - **Check the evidence:** Reviewed screening counts must match an independent reference before publication. Exploratory results show their narrower validation level.
-- **See the observed evaluation:** A saved 30-question run scored **27/30 initially, 29/30 after correcting two scoring rules**. The latest clarification change has **not yet had a fresh live 30-question run**; see [evaluation details](evaluation/report.md).
+- **See the observed evaluation:** A fresh live run passed **30/30 fixed questions** after the clarification change. Earlier runs and scoring corrections remain documented; this is not a general accuracy estimate. See [evaluation details](evaluation/report.md).
 - **Know the scope:** The data are synthetic Synthea records. This is a demonstration of auditable data analysis, not a clinical finding or population estimate.
 
 ![Verified 2020 screening analysis showing the selected tool, independent count check, table, and chart](docs/images/verified-screening-2020.png)
@@ -102,7 +102,7 @@ Do not commit a populated `secrets.toml` file. The app reads these values from e
 
 ## Evaluation
 
-[`evaluation/report.md`](evaluation/report.md) records the observed runs, failures, and corrections. In a live **30-question fixed evaluation**, the original score was **27/30**; after correcting two overly literal response-phrase checks using the saved outputs, the score was **29/30**: 7/7 verified-measure, 12/12 exploratory, and 10/11 no-analysis cases. In the remaining case, the model proposed a tool for an ambiguous question; a request check rejected it before a query ran. A subsequent local change now clarifies such wording before tool selection; it has **not yet been re-evaluated in a live 30-question run**. These fixed-case results are **not a general accuracy or routing estimate**. The original run, corrected rescore, and earlier failures remain in the report. The latest full offline test run passed **68 tests**, including 18 independent annual SQL–Pandas comparisons; live model routing is checked separately.
+[`evaluation/report.md`](evaluation/report.md) records the fixed questions, observed runs, failures, and corrections. The latest **live 30-question run passed 30/30**: 7/7 independently checked screening cases, 12/12 exploratory cases, and 11/11 clarification or refusal cases. The saved [run record](evaluation/open_smoke_20261110T023838Z.json) contains each question's status, tool, checks, and elapsed time. An earlier run scored 27/30 initially and 29/30 after correcting two overly literal scoring rules; those records remain available. The 30/30 result describes **these fixed questions in one run**, not general agent accuracy or a clinical validation. The latest full offline test run passed **68 tests**, including 18 independent annual SQL–Pandas comparisons.
 
 Run local checks with:
 
