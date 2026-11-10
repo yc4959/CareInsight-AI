@@ -10,6 +10,8 @@
 
 The expanded suite was run on November 9, 2026 US Eastern time (saved as `open_smoke_20261110T015847Z.json` in UTC). The original score was **27/30**. Q05 and Q07 were incorrectly failed by literal response-phrase checks despite safe, appropriate responses. Q19 was a real routing failure: the model proposed the verified screening tool for an ambiguous question; the request check rejected it before a query ran, then the model asked for clarification. The original run remains unchanged. After broadening only the two response-phrase checks, re-scoring the stored responses gives **29/30**; this correction makes no additional model calls. These counts describe the fixed cases only and are not a general accuracy estimate.
 
+**Follow-up change:** An ambiguity check now asks what “checked for depression/substance use” means before model tool selection when the question does not explicitly say screening records or diagnosis. Q19 and four new everyday phrasings passed local no-model checks; explicit screening-record wording remained outside that check. The full local test suite passed **65 tests**. This is a code-level regression result, not a new live 30-question model score.
+
 ## What was tested
 
 The agent interprets a question, selects either restricted aggregate SQL or parameterized Pandas, executes it, and displays the resulting table and analysis trace. These smoke tests check whether the observed output matches independently calculated reference counts or whether the system correctly declines to run a query. They do not estimate general-purpose accuracy or clinical validity.

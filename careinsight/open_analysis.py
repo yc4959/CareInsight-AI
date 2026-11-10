@@ -333,6 +333,17 @@ def _request_boundary(question):
             "what caused them. If you want a descriptive comparison, ask for "
             "record counts or percentages instead. No analysis was run."
         )
+    # "Checked for" can mean a screening record, a diagnosis, or a completed
+    # clinical check. Resolve that meaning before the model can propose a tool.
+    if (re.search(r"\bcheck(?:ed|ing)?\s+(?:for|whether)\b", q)
+            and re.search(r"\b(depression|substance use|drug abuse)\b", q)
+            and not re.search(r"\b(screen(?:ing|ings)?|diagnos(?:is|es|ed)|record(?:s|ed)?)\b", q)):
+        return (
+            "When you say 'checked for', do you mean people with a recorded "
+            "screening procedure, or people diagnosed with the condition? "
+            "I can count screening records, but a record does not prove the "
+            "check was completed. Please choose before I analyze the data."
+        )
     disease = bool(re.search(r"\b(disease|diseases|illness|illnesses)\b", q)
                    or any(word in q for word in ("疾病", "患病")))
     defined_record = bool(re.search(r"\b(condition records?|disorder-labeled|recorded conditions?)\b", q)
