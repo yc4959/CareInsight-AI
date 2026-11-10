@@ -43,6 +43,24 @@ def _counts(rows, value_kind):
 
 def _score_saved(outcome, case):
     """Score stored model output without making another API request."""
+    if outcome["observed_status"] == "validated":
+        try:
+            actual = {row["group_name"]: [row["denominator"], row["numerator"]]
+                      for row in outcome["rows"]}
+            expected = case["expected_groups"]
+            outcome["observed_groups"] = actual
+            outcome["tool_ok"] = outcome.get("tool") == case["expected_tool"]
+            outcome["counts_ok"] = actual == expected
+            outcome["validation_ok"] = (
+                outcome.get("validation_level") == "independent_metric_reference"
+            )
+            outcome["passed"] = (case["expected_status"] == "validated"
+                                 and outcome["tool_ok"] and outcome["counts_ok"]
+                                 and outcome["validation_ok"])
+        except (KeyError, TypeError, ValueError) as exc:
+            outcome["scoring_error"] = str(exc)
+            outcome["passed"] = False
+        return outcome
     if outcome["observed_status"] != "exploratory":
         expected_phrases = case.get("expected_message_contains", [])
         message = outcome.get("message", "").casefold()
@@ -66,10 +84,15 @@ def _score_saved(outcome, case):
             label: actual.get(label) == value for label, value in expected.items()
         }
         outcome["row_count_ok"] = len(outcome["rows"]) == case["expected_row_count"]
+        outcome["tool_ok"] = ("expected_tools" not in case
+                              or outcome.get("tool") in case["expected_tools"])
+        outcome["counts_complete"] = actual == expected
         outcome["passed"] = (
             case["expected_status"] == "exploratory"
             and outcome["row_count_ok"]
             and all(outcome["count_checks"].values())
+            and outcome["tool_ok"]
+            and outcome["counts_complete"]
         )
         outcome.pop("scoring_error", None)
     except (ValueError, KeyError) as exc:
@@ -86,7 +109,7 @@ def evaluate_case(case):
         result = analyze(case["question"])
         outcome["observed_status"] = result["status"]
         outcome["attempts"] = result.get("attempts", [])
-        if result["status"] == "exploratory":
+        if result["status"] in {"exploratory", "validated"}:
             outcome["tool"] = result["tool"]
             outcome["plan"] = result["plan"]
             outcome["source_tables"] = result["query"]["source_tables"]

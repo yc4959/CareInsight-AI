@@ -2,7 +2,13 @@
 
 **Run dates:** November 8–9, 2026 (US Eastern time)  
 **Dataset:** Synthea synthetic CSV sample  
-**Scope:** Thirteen fixed single-turn questions and two fixed two-turn clarification conversations about procedure records, encounter types, condition records, ambiguity, causation, unavailable years, and identifier disclosure.
+**Scope of completed live runs:** Thirteen fixed single-turn questions and two fixed two-turn clarification conversations about procedure records, encounter types, condition records, ambiguity, causation, unavailable years, and identifier disclosure.
+
+## Expanded fixed evaluation set (pending live run)
+
+`open_benchmark_cases.json` now contains **30 single-turn cases**. They cover independently checked screening measures, ordinary and paraphrased requests for exploratory counts, ambiguous wording, unsupported clinical claims, unavailable years, and patient-level disclosure. Exploratory reference counts specify whether the unit is records or distinct patients. Verified-measure cases require the expected tool, exact numerator and denominator for every group, and the independent-reference validation label. These are test definitions, **not 30 observed passes**.
+
+The expanded suite was run on November 9, 2026 US Eastern time (saved as `open_smoke_20261110T015847Z.json` in UTC). The original score was **27/30**. Q05 and Q07 were incorrectly failed by literal response-phrase checks despite safe, appropriate responses. Q19 was a real routing failure: the model proposed the verified screening tool for an ambiguous question; the request check rejected it before a query ran, then the model asked for clarification. The original run remains unchanged. After broadening only the two response-phrase checks, re-scoring the stored responses gives **29/30**; this correction makes no additional model calls. These counts describe the fixed cases only and are not a general accuracy estimate.
 
 ## What was tested
 

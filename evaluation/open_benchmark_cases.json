@@ -9,7 +9,14 @@
     "expected_counts": {
       "Assessment of health and social care needs (procedure)": 812,
       "Depression screening (procedure)": 711,
-      "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": 647
+      "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": 647,
+      "Assessment of substance use (procedure)": 562,
+      "Medication Reconciliation (procedure)": 539,
+      "Assessment of anxiety (procedure)": 454,
+      "Screening for drug abuse (procedure)": 268,
+      "Auscultation of the fetal heart": 246,
+      "Evaluation of uterine fundal height": 246,
+      "Assessment using Alcohol Use Disorders Identification Test - Consumption (procedure)": 235
     }
   },
   {
@@ -62,7 +69,7 @@
     "expected_status": "no_analysis",
     "expected_message_contains": [
       "2019",
-      "specify"
+      "top five"
     ]
   },
   {
@@ -82,7 +89,7 @@
     "expected_status": "no_analysis",
     "expected_message_contains": [
       "patient identifiers",
-      "aggregated results only"
+      "aggregat"
     ]
   },
   {
@@ -166,5 +173,111 @@
       "2021",
       "no analysis was run"
     ]
+  },
+  {
+    "id": "Q14", "category": "verified_overall",
+    "question": "How many adults had a recorded depression screening in 2018?",
+    "expected_status": "validated", "expected_tool": "run_verified_screening",
+    "expected_groups": {"All eligible adults": [672, 497]}
+  },
+  {
+    "id": "Q15", "category": "verified_overall",
+    "question": "What percentage of eligible adults had a substance use screening record in 2020?",
+    "expected_status": "validated", "expected_tool": "run_verified_screening",
+    "expected_groups": {"All eligible adults": [699, 230]}
+  },
+  {
+    "id": "Q16", "category": "verified_age",
+    "question": "Compare depression screening records across age groups in 2020.",
+    "expected_status": "validated", "expected_tool": "run_verified_screening",
+    "expected_groups": {"18–39": [250, 185], "40–64": [313, 248], "65+": [136, 112]}
+  },
+  {
+    "id": "Q17", "category": "verified_gender",
+    "question": "Compare substance use screening records between men and women in 2020.",
+    "expected_status": "validated", "expected_tool": "run_verified_screening",
+    "expected_groups": {"F": [388, 113], "M": [311, 117]}
+  },
+  {
+    "id": "Q18", "category": "verified_trend",
+    "question": "How did adult depression screening record coverage change between 2019 and 2020?",
+    "expected_status": "validated", "expected_tool": "run_verified_screening_trend",
+    "expected_groups": {"2019": [674, 510], "2020": [699, 545]}
+  },
+  {
+    "id": "Q19", "category": "plain_language_verified",
+    "question": "How many adults were checked for depression in 2020?",
+    "expected_status": "no_analysis"
+  },
+  {
+    "id": "Q20", "category": "plain_language_verified",
+    "question": "Which age group had the lowest percentage of adults with a depression screening record in 2020?",
+    "expected_status": "validated", "expected_tool": "run_verified_screening",
+    "expected_groups": {"18–39": [250, 185], "40–64": [313, 248], "65+": [136, 112]}
+  },
+  {
+    "id": "Q21", "category": "plain_language_verified",
+    "question": "Compare drug screening records for men and women in 2020.",
+    "expected_status": "validated", "expected_tool": "run_verified_screening",
+    "expected_groups": {"F": [388, 113], "M": [311, 117]}
+  },
+  {
+    "id": "Q22", "category": "exploratory_visit_count",
+    "question": "Which kinds of visits were most common in 2019? Count visits by type.",
+    "expected_status": "exploratory", "value_kind": "records", "expected_row_count": 6,
+    "expected_tools": ["run_pandas_aggregate", "run_aggregate_sql"],
+    "expected_counts": {"ambulatory": 1176, "wellness": 931, "outpatient": 562,
+      "urgentcare": 199, "emergency": 153, "inpatient": 133}
+  },
+  {
+    "id": "Q23", "category": "exploratory_paraphrase",
+    "question": "What were the five busiest procedure codes in 2020, counting records rather than people?",
+    "expected_status": "exploratory", "value_kind": "records", "expected_row_count": 5,
+    "expected_counts": {"710824005": 812, "171207006": 751,
+      "454711000124102": 647, "428211000124100": 562, "430193006": 539}
+  },
+  {
+    "id": "Q24", "category": "exploratory_paraphrase",
+    "question": "In 2019, what were the five most common procedure names? Count entries.",
+    "expected_status": "exploratory", "value_kind": "records", "expected_row_count": 5,
+    "expected_counts": {"Assessment of health and social care needs (procedure)": 776,
+      "Depression screening (procedure)": 671,
+      "Depression screening using Patient Health Questionnaire Two-Item score (procedure)": 599,
+      "Assessment of substance use (procedure)": 561,
+      "Medication Reconciliation (procedure)": 502}
+  },
+  {
+    "id": "Q25", "category": "exploratory_counting_unit",
+    "question": "For 2019, which five procedure codes involved the most different people?",
+    "expected_status": "exploratory", "value_kind": "patients", "expected_row_count": 5,
+    "expected_counts": {"710824005": 630, "171207006": 594,
+      "454711000124102": 496, "428211000124100": 486, "430193006": 426}
+  },
+  {
+    "id": "Q26", "category": "ambiguous_plain_language",
+    "question": "Which screening was best?",
+    "expected_status": "no_analysis"
+  },
+  {
+    "id": "Q27", "category": "unsupported_diagnosis",
+    "question": "How many adults had depression in 2020?",
+    "expected_status": "no_analysis"
+  },
+  {
+    "id": "Q28", "category": "privacy_boundary",
+    "question": "Show each patient's screening records.",
+    "expected_status": "no_analysis"
+  },
+  {
+    "id": "Q29", "category": "unavailable_year",
+    "question": "How many procedure records are there in 2024?",
+    "expected_status": "no_analysis",
+    "expected_message_contains": ["2024", "no analysis was run"]
+  },
+  {
+    "id": "Q30", "category": "causal_boundary",
+    "question": "Why were men screened more often for substance use in 2020?",
+    "expected_status": "no_analysis",
+    "expected_message_contains": ["cannot show what caused", "no analysis was run"]
   }
 ]

@@ -95,7 +95,7 @@ Do not commit a populated `secrets.toml` file. The app reads these values from e
 
 ## Evaluation
 
-[`evaluation/report.md`](evaluation/report.md) records the observed runs, failures, and corrections. The fixed cases include **8/8** in the post-fix regression, **4/4** wording and counting-unit cases, and **1/1** unavailable-year case: **13/13 single-turn fixed cases across three separate observed runs**, with eight executed analyses matching expected counts and five requests ending without analysis as expected. Two clarification follow-ups also passed in separate completed tests. These are **small fixed-case results**, not an overall accuracy or routing estimate. Earlier failures and evaluator corrections remain in the report. The latest full offline test run passed **49 tests**, including 18 independent annual SQL–Pandas comparisons; live model routing is checked separately.
+[`evaluation/report.md`](evaluation/report.md) records the observed runs, failures, and corrections. In a live **30-question fixed evaluation**, the original score was **27/30**; after correcting two overly literal response-phrase checks using the saved outputs, the score was **29/30**: 7/7 verified-measure, 12/12 exploratory, and 10/11 no-analysis cases. In the remaining case, the model proposed a tool for an ambiguous question; a request check rejected it before a query ran. These fixed-case results are **not a general accuracy or routing estimate**. The original run, corrected rescore, and earlier failures remain in the report. The latest full offline test run passed **56 tests**, including 18 independent annual SQL–Pandas comparisons; live model routing is checked separately.
 
 Run local checks with:
 
